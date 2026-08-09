@@ -27,22 +27,22 @@
       touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
-      background-color: #020617;
+      background-color: #030816;
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     .font-serif-title { font-family: 'Playfair Display', serif; }
 
-    /* ESTILOS DE TARJETAS APILADAS (PROYECTOS) */
+    /* ESTILOS DE TARJETAS APILADAS (PROYECTOS) EXACTOS A LA FOTO */
     .stacked-container {
       display: flex;
       flex-direction: column;
-      padding-bottom: 20px;
+      padding-bottom: 30px;
     }
 
     .stacked-card {
-      margin-bottom: -125px;
+      margin-bottom: -135px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       cursor: pointer;
@@ -54,32 +54,44 @@
 
     .stacked-card:hover {
       transform: translateY(-12px);
-      z-index: 40 !important;
+      z-index: 50 !important;
     }
 
-    /* COLORES FIEL A LAS CAPTURAS */
+    /* COLORES Y FONDOS CON DEGRADADO + IMAGEN FOTOGRÁFICA */
     .card-blue {
-      background: linear-gradient(145deg, #071739 0%, #030a1c 100%);
-      border: 1px solid #1d4ed8;
-      box-shadow: 0 12px 30px -5px rgba(29, 78, 216, 0.35);
+      background: linear-gradient(135deg, rgba(6, 26, 68, 0.94) 0%, rgba(3, 12, 34, 0.98) 100%), 
+                  url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(37, 99, 235, 0.5);
+      box-shadow: 0 15px 35px -5px rgba(29, 78, 216, 0.4);
     }
 
     .card-green {
-      background: linear-gradient(145deg, #042416 0%, #02120b 100%);
-      border: 1px solid #10b981;
-      box-shadow: 0 12px 30px -5px rgba(16, 185, 129, 0.25);
+      background: linear-gradient(135deg, rgba(4, 38, 24, 0.92) 0%, rgba(2, 18, 11, 0.96) 100%), 
+                  url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      box-shadow: 0 15px 35px -5px rgba(16, 185, 129, 0.25);
     }
 
     .card-amber {
-      background: linear-gradient(145deg, #281a04 0%, #110b02 100%);
-      border: 1px solid #d97706;
-      box-shadow: 0 12px 30px -5px rgba(217, 119, 6, 0.25);
+      background: linear-gradient(135deg, rgba(45, 28, 4, 0.92) 0%, rgba(18, 11, 2, 0.96) 100%), 
+                  url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(217, 119, 6, 0.4);
+      box-shadow: 0 15px 35px -5px rgba(217, 119, 6, 0.25);
     }
 
     .card-purple {
-      background: linear-gradient(145deg, #1b0c30 0%, #0d0417 100%);
-      border: 1px solid #8b5cf6;
-      box-shadow: 0 12px 30px -5px rgba(139, 92, 246, 0.25);
+      background: linear-gradient(135deg, rgba(30, 14, 52, 0.92) 0%, rgba(13, 4, 23, 0.96) 100%), 
+                  url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.25);
     }
 
     .glass-box {
@@ -92,7 +104,7 @@
     * { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="w-full h-full bg-[#020617] text-white">
+<body class="w-full h-full bg-[#030816] text-white">
 
   <div id="root" class="w-full h-full"></div>
 
@@ -104,19 +116,19 @@
     const SUPABASE_ANON_KEY = "sb_publishable_WIxlCKHdUlFBJM--qnpQ0w_VlU_CM3i";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // LOGO WEBLOCK EXACTO DE LAS FOTOS
+    // LOGO WEBLOCK EXACTO CON EL ISOTIPO CÚBICO
     const WeBlockLogo = () => (
-      <div className="w-7 h-7 relative flex items-center justify-center">
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" fill="none" stroke="#2563eb" strokeWidth="8" />
-          <path d="M50 10 L85 30 L50 50 L15 30 Z" fill="#2563eb" opacity="0.6" />
-          <path d="M50 50 L85 30 L85 70 L50 90 Z" fill="#1d4ed8" />
-          <path d="M50 50 L15 30 L15 70 L50 90 Z" fill="#3b82f6" opacity="0.8" />
+      <div className="w-8 h-8 relative flex items-center justify-center shrink-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(37,99,235,0.6)]">
+          <path d="M50 12 L82 30 L82 68 L50 86 L18 68 L18 30 Z" fill="none" stroke="#2563eb" strokeWidth="7" />
+          <path d="M50 12 L82 30 L50 49 L18 30 Z" fill="#3b82f6" />
+          <path d="M50 49 L82 30 L82 68 L50 86 Z" fill="#1d4ed8" />
+          <path d="M50 49 L18 30 L18 68 L50 86 Z" fill="#1e40af" />
         </svg>
       </div>
     );
 
-    // ICONOS DEL MENU INFERIOR Y SECCIONES
+    // ICONOS DE LA BARRA INFERIOR Y SECCIONES
     const IconInicio = ({ active }) => (
       <svg className={`w-6 h-6 ${active ? 'text-blue-500' : 'text-slate-500'}`} fill="currentColor" viewBox="0 0 24 24">
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
@@ -141,7 +153,7 @@
       </svg>
     );
 
-    // --- COMPONENTE DE AUTENTICACIÓN ---
+    // --- COMPONENTE DE AUTENTICACIÓN COMPLETO ---
     const AuthScreen = ({ onAuthSuccess }) => {
       const [isLogin, setIsLogin] = useState(true);
       const [nombre, setNombre] = useState('');
@@ -233,7 +245,7 @@
       };
 
       return (
-        <div className="fixed inset-0 bg-[#020617] z-50 flex flex-col justify-center px-6 overflow-y-auto py-8">
+        <div className="fixed inset-0 bg-[#030816] z-50 flex flex-col justify-center px-6 overflow-y-auto py-8">
           <div className="flex flex-col items-center mb-6">
             <WeBlockLogo />
             <h1 className="text-3xl font-bold tracking-tight mt-2">We<span className="text-blue-500">Block</span></h1>
@@ -348,10 +360,10 @@
       );
     };
 
-    // --- APP PRINCIPAL ---
+    // --- APP PRINCIPAL COMPLETA ---
     const App = () => {
       const [user, setUser] = useState(null);
-      const [activeTab, setActiveTab] = useState('inicio');
+      const [activeTab, setActiveTab] = useState('proyectos');
       const [selectedProject, setSelectedProject] = useState(null);
       const [movFilter, setMovFilter] = useState('Todos');
 
@@ -375,10 +387,10 @@
       const userFullName = user.user_metadata?.full_name || 'Axel DiBella';
 
       return (
-        <div className="w-full h-full flex flex-col md:flex-row bg-[#020617] overflow-hidden relative">
+        <div className="w-full h-full flex flex-col md:flex-row bg-[#030816] overflow-hidden relative">
           
           {/* BARRA LATERAL (PC) */}
-          <aside className="hidden md:flex flex-col w-64 border-r border-slate-800/80 p-6 space-y-8 bg-[#030712] shrink-0">
+          <aside className="hidden md:flex flex-col w-64 border-r border-slate-800/80 p-6 space-y-8 bg-[#020510] shrink-0">
             <div className="flex items-center gap-3">
               <WeBlockLogo />
               <span className="text-xl font-bold tracking-wider">We<span className="text-blue-500">Block</span></span>
@@ -409,7 +421,15 @@
           {/* CONTENIDO PRINCIPAL */}
           <main className={`flex-1 overflow-y-auto w-full max-w-2xl mx-auto p-4 md:p-8 pb-28 ${selectedProject === 'Distrito Verde' ? 'bg-[#02120b]' : ''}`}>
             
-            {/* ==================== VISTA DETALLE: DISTRITO VERDE (FOTO 1) ==================== */}
+            {/* LOGO DE MARCA SUPERIOR MÓVIL */}
+            {!selectedProject && (
+              <div className="flex items-center gap-2.5 mb-5 md:hidden">
+                <WeBlockLogo />
+                <span className="text-2xl font-extrabold tracking-tight">We<span className="text-blue-500">Block</span></span>
+              </div>
+            )}
+
+            {/* ==================== VISTA DETALLE: DISTRITO VERDE ==================== */}
             {selectedProject === 'Distrito Verde' ? (
               <div className="space-y-5 animate-fadeIn">
                 {/* Header superior */}
@@ -550,16 +570,9 @@
               </div>
             ) : (
               <>
-                {/* ==================== VISTA: INICIO (FOTO 2) ==================== */}
+                {/* ==================== VISTA: INICIO ==================== */}
                 {activeTab === 'inicio' && (
                   <div className="space-y-5 animate-fadeIn">
-                    <div className="flex justify-between items-center md:hidden">
-                      <div className="flex items-center gap-2">
-                        <WeBlockLogo />
-                        <span className="text-lg font-bold">We<span className="text-blue-500">Block</span></span>
-                      </div>
-                    </div>
-
                     <div>
                       <p className="text-slate-300 text-sm">Buenos días,</p>
                       <h1 className="text-4xl font-extrabold text-white tracking-tight mt-0.5">{userName}</h1>
@@ -647,107 +660,106 @@
                   </div>
                 )}
 
-                {/* ==================== VISTA: PROYECTOS (FOTO 5) ==================== */}
+                {/* ==================== VISTA: PROYECTOS (ESTILO COMPLETO APILADO) ==================== */}
                 {activeTab === 'proyectos' && (
                   <div className="space-y-5 animate-fadeIn">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center mb-1">
                       <div>
-                        <h1 className="text-4xl font-extrabold text-white">Proyectos</h1>
+                        <h1 className="text-4xl font-extrabold text-white tracking-tight">Proyectos</h1>
                         <p className="text-xs text-slate-400 mt-1">Tus inversiones en desarrollo</p>
                       </div>
-                      <button className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-xl font-bold">
+                      <button className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-xl font-bold shadow-lg">
                         +
                       </button>
                     </div>
 
-                    {/* APILAMIENTO DE TARJETAS TAL CUAL LA FOTO 5 */}
+                    {/* APILAMIENTO VERTICAL DE TARJETAS TAL CUAL LA FOTO */}
                     <div className="stacked-container relative pt-2">
                       
-                      {/* TARJETA 1: TORRE NORTE (AZUL) */}
-                      <div className="stacked-card card-blue rounded-3xl p-5 z-40 flex justify-between overflow-hidden min-h-[260px]">
-                        <div className="flex-1 pr-4 space-y-3">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/30">
+                      {/* TARJETA 1: TORRE NORTE (AZUL CON IMAGEN DE FONDO) */}
+                      <div className="stacked-card card-blue rounded-[32px] p-6 z-40 relative overflow-hidden min-h-[300px] flex flex-col justify-between">
+                        <div>
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/30 mb-3">
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> En construcción
                           </span>
+                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Torre Norte</h2>
+                          <p className="text-xs text-slate-300/80 font-medium mt-0.5">Desarrolladora Urbana</p>
+                        </div>
+
+                        <div className="space-y-3 my-2">
                           <div>
-                            <h2 className="text-3xl font-serif-title font-bold text-white">Torre Norte</h2>
-                            <p className="text-xs text-slate-400 font-medium">Desarrolladora Urbana</p>
-                          </div>
-
-                          <div className="pt-2">
-                            <p className="text-[10px] text-slate-400">Rentabilidad anual estimada</p>
-                            <p className="text-2xl font-extrabold text-blue-400">12,4%</p>
+                            <p className="text-[10px] text-slate-300/70 font-medium">Rentabilidad anual estimada</p>
+                            <p className="text-3xl font-extrabold text-blue-400">12,4%</p>
                           </div>
 
                           <div>
-                            <p className="text-[10px] text-slate-400">Tu inversión</p>
-                            <p className="text-xl font-bold text-white">$50.000.000</p>
-                          </div>
-
-                          <div className="flex gap-6 text-xs pt-1">
-                            <div>
-                              <p className="text-[9px] text-slate-400">Participación</p>
-                              <p className="font-bold text-white">2,35%</p>
-                            </div>
-                            <div>
-                              <p className="text-[9px] text-slate-400">Tokens</p>
-                              <p className="font-bold text-white">50.000</p>
-                            </div>
+                            <p className="text-[10px] text-slate-300/70 font-medium">Tu inversión</p>
+                            <p className="text-2xl font-bold text-white">$50.000.000</p>
                           </div>
                         </div>
 
-                        <div className="flex flex-col justify-between items-end shrink-0">
-                          <div className="w-10 h-10 rounded-full bg-blue-900/60 border border-blue-500/40 flex items-center justify-center text-white font-bold text-lg">
+                        <div className="flex justify-between items-end border-t border-blue-500/20 pt-3">
+                          <div className="flex gap-6">
+                            <div>
+                              <p className="text-[9px] text-slate-300/70">Participación</p>
+                              <p className="text-xs font-bold text-white">2,35%</p>
+                            </div>
+                            <div>
+                              <p className="text-[9px] text-slate-300/70">Tokens</p>
+                              <p className="text-xs font-bold text-white">50.000</p>
+                            </div>
+                          </div>
+
+                          <div className="w-10 h-10 rounded-full bg-blue-900/60 border border-blue-400/50 flex items-center justify-center text-white text-lg">
                             →
                           </div>
-                          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=300&q=80" className="w-28 h-32 object-cover rounded-2xl border border-blue-500/30 opacity-80" />
                         </div>
                       </div>
 
-                      {/* TARJETA 2: DISTRITO VERDE (VERDE) */}
-                      <div onClick={() => setSelectedProject('Distrito Verde')} className="stacked-card card-green rounded-3xl p-5 z-30 flex justify-between overflow-hidden min-h-[220px]">
-                        <div className="flex-1 pr-4 space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-400/30">
+                      {/* TARJETA 2: DISTRITO VERDE (VERDE CON IMAGEN DE FONDO) */}
+                      <div 
+                        onClick={() => setSelectedProject('Distrito Verde')} 
+                        className="stacked-card card-green rounded-[32px] p-6 z-30 relative overflow-hidden min-h-[220px] flex justify-between items-start"
+                      >
+                        <div className="space-y-2">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-400/30">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> En preventa
                           </span>
-                          <div>
-                            <h2 className="text-2xl font-serif-title font-bold text-white">Distrito Verde</h2>
-                            <p className="text-xs text-slate-400 font-medium">Desarrolladora Urbana</p>
-                          </div>
+                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Distrito Verde</h2>
+                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-500/40 flex items-center justify-center text-white font-bold text-lg shrink-0">
+
+                        <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
                           →
                         </div>
                       </div>
 
-                      {/* TARJETA 3: ALTOS DEL SUR (AMBER) */}
-                      <div className="stacked-card card-amber rounded-3xl p-5 z-20 flex justify-between overflow-hidden min-h-[220px]">
-                        <div className="flex-1 pr-4 space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-400/30">
+                      {/* TARJETA 3: ALTOS DEL SUR (ÁMBAR CON IMAGEN DE FONDO) */}
+                      <div className="stacked-card card-amber rounded-[32px] p-6 z-20 relative overflow-hidden min-h-[220px] flex justify-between items-start">
+                        <div className="space-y-2">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-400/30">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> En obra
                           </span>
-                          <div>
-                            <h2 className="text-2xl font-serif-title font-bold text-white">Altos del Sur</h2>
-                            <p className="text-xs text-slate-400 font-medium">Desarrolladora Urbana</p>
-                          </div>
+                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Altos del Sur</h2>
+                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-amber-900/60 border border-amber-500/40 flex items-center justify-center text-white font-bold text-lg shrink-0">
+
+                        <div className="w-10 h-10 rounded-full bg-amber-900/60 border border-amber-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
                           →
                         </div>
                       </div>
 
-                      {/* TARJETA 4: COSTANERA VIEW (PURPLE) */}
-                      <div className="stacked-card card-purple rounded-3xl p-5 z-10 flex justify-between overflow-hidden min-h-[220px]">
-                        <div className="flex-1 pr-4 space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[11px] font-semibold border border-purple-400/30">
+                      {/* TARJETA 4: COSTANERA VIEW (VIOLETA CON IMAGEN DE FONDO) */}
+                      <div className="stacked-card card-purple rounded-[32px] p-6 z-10 relative overflow-hidden min-h-[220px] flex justify-between items-start">
+                        <div className="space-y-2">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-[11px] font-semibold border border-purple-400/30">
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Finalizado
                           </span>
-                          <div>
-                            <h2 className="text-2xl font-serif-title font-bold text-white">Costanera View</h2>
-                            <p className="text-xs text-slate-400 font-medium">Desarrolladora Urbana</p>
-                          </div>
+                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Costanera View</h2>
+                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
                         </div>
-                        <div className="w-10 h-10 rounded-full bg-purple-900/60 border border-purple-500/40 flex items-center justify-center text-white font-bold text-lg shrink-0">
+
+                        <div className="w-10 h-10 rounded-full bg-purple-900/60 border border-purple-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
                           →
                         </div>
                       </div>
@@ -756,7 +768,7 @@
                   </div>
                 )}
 
-                {/* ==================== VISTA: MOVIMIENTOS (FOTO 3) ==================== */}
+                {/* ==================== VISTA: MOVIMIENTOS ==================== */}
                 {activeTab === 'movimientos' && (
                   <div className="space-y-5 animate-fadeIn">
                     <div className="flex justify-between items-center">
@@ -908,7 +920,7 @@
                   </div>
                 )}
 
-                {/* ==================== VISTA: PERFIL (FOTO 4) ==================== */}
+                {/* ==================== VISTA: PERFIL ==================== */}
                 {activeTab === 'perfil' && (
                   <div className="space-y-5 animate-fadeIn">
                     <div className="flex justify-between items-center">
@@ -1022,7 +1034,7 @@
           </main>
 
           {/* BOTONERA INFERIOR (MÓVIL) FIEL A LAS IMÁGENES */}
-          <div className="md:hidden fixed bottom-0 inset-x-0 bg-[#030712]/95 backdrop-blur-md border-t border-slate-800/80 py-2.5 px-6 flex justify-around items-center z-40">
+          <div className="md:hidden fixed bottom-0 inset-x-0 bg-[#020510]/95 backdrop-blur-md border-t border-slate-800/80 py-2.5 px-6 flex justify-around items-center z-50">
             {[
               { id: 'inicio', label: 'Inicio', icon: IconInicio },
               { id: 'proyectos', label: 'Proyectos', icon: IconProyectos },
