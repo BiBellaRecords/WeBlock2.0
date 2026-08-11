@@ -100,6 +100,106 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+
+    /* =========================================================
+       WEBLOCK - INICIO RESPONSIVE
+       Desktop: dashboard amplio como la referencia.
+       Mobile: layout compacto tipo app.
+       ========================================================= */
+
+    .weblock-logo-crop {
+      width: 200px;
+      height: 100px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .weblock-logo-image {
+      width: 188px;
+      height: auto;
+      max-width: none;
+      display: block;
+      transform: scale(1.04);
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 10px rgba(37,99,235,.20));
+    }
+
+    .weblock-logo-large {
+      width: 220px;
+      height: 64px;
+    }
+
+    .weblock-logo-large .weblock-logo-image {
+      width: 245px;
+    }
+
+    .home-dashboard {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .home-hero {
+      min-height: 360px;
+    }
+
+    .home-patrimony {
+      margin-top: -1px;
+    }
+
+    .home-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .home-stat-card {
+      min-width: 0;
+      min-height: 150px;
+    }
+
+    @media (max-width: 767px) {
+      .weblock-logo-crop {
+        width: 158px;
+        height: 48px;
+      }
+
+      .weblock-logo-image {
+        width: 175px;
+      }
+
+      .weblock-logo-large {
+        width: 190px;
+        height: 56px;
+      }
+
+      .weblock-logo-large .weblock-logo-image {
+        width: 215px;
+      }
+
+      .home-dashboard {
+        max-width: none;
+      }
+
+      .home-hero {
+        min-height: 330px;
+      }
+
+      .home-stats-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .home-stat-card {
+        min-height: auto;
+      }
+    }
+
     ::-webkit-scrollbar { display: none; }
     * { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -116,15 +216,15 @@
     const SUPABASE_ANON_KEY = "sb_publishable_WIxlCKHdUlFBJM--qnpQ0w_VlU_CM3i";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // LOGO WEBLOCK EXACTO CON EL ISOTIPO CÚBICO
-    const WeBlockLogo = () => (
-      <div className="w-8 h-8 relative flex items-center justify-center shrink-0">
-        <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_10px_rgba(37,99,235,0.6)]">
-          <path d="M50 12 L82 30 L82 68 L50 86 L18 68 L18 30 Z" fill="none" stroke="#2563eb" strokeWidth="7" />
-          <path d="M50 12 L82 30 L50 49 L18 30 Z" fill="#3b82f6" />
-          <path d="M50 49 L82 30 L82 68 L50 86 Z" fill="#1d4ed8" />
-          <path d="M50 49 L18 30 L18 68 L50 86 Z" fill="#1e40af" />
-        </svg>
+    // LOGO WEBLOCK: LogoWeBlock.png
+    // El blend "screen" hace que el fondo negro del PNG se camufle con el fondo de la web.
+    const WeBlockLogo = ({ large = false }) => (
+      <div className={`weblock-logo-crop ${large ? 'weblock-logo-large' : ''}`}>
+        <img
+          src="./Logo2.png"
+          alt="WeBlock"
+          className="weblock-logo-image"
+        />
       </div>
     );
 
@@ -232,7 +332,6 @@
                   full_name: `${nombre} ${apellido}`.trim(),
                   first_name: nombre,
                   last_name: apellido,
-                  role: 'investor' 
                 } 
               }
             });
@@ -360,20 +459,407 @@
       );
     };
 
+
+    // ==================== PERFIL: SECCIONES FUNCIONALES ====================
+    const ProfileSection = ({ section, user, profile, onBack }) => {
+      const [loading, setLoading] = useState(false);
+      const [message, setMessage] = useState('');
+      const [error, setError] = useState('');
+
+      const rawRole = profile?.Role || profile?.role || 'cliente';
+      const normalizedRole = String(rawRole).toLowerCase();
+      const canManageDocuments = ['admin', 'dueño', 'owner'].includes(normalizedRole);
+
+      const [firstName, setFirstName] = useState(profile?.nombre || user?.user_metadata?.first_name || '');
+      const [lastName, setLastName] = useState(profile?.apellido || user?.user_metadata?.last_name || '');
+      const [phone, setPhone] = useState(profile?.telefono || user?.user_metadata?.phone || '');
+
+      const [currentPassword, setCurrentPassword] = useState('');
+      const [newPassword, setNewPassword] = useState('');
+      const [repeatNewPassword, setRepeatNewPassword] = useState('');
+      const [notifications, setNotifications] = useState(() => localStorage.getItem('weblock_notifications') !== 'false');
+      const [ringtone, setRingtone] = useState(() => localStorage.getItem('weblock_ringtone') || 'classic');
+
+      const [documents, setDocuments] = useState([]);
+      const [documentsLoading, setDocumentsLoading] = useState(false);
+      const [uploading, setUploading] = useState(false);
+      const [visibility, setVisibility] = useState('all');
+      const [users, setUsers] = useState([]);
+      const [selectedUserIds, setSelectedUserIds] = useState([]);
+      const [loadingUsers, setLoadingUsers] = useState(false);
+
+      useEffect(() => {
+        if (section === 'documentos') {
+          loadDocuments();
+          if (canManageDocuments) loadUsers();
+        }
+      }, [section, canManageDocuments]);
+
+      const loadDocuments = async () => {
+        setDocumentsLoading(true);
+        setError('');
+        const { data, error } = await supabase.from('documents').select('*').order('created_at', { ascending: false });
+        if (error) {
+          setError('No se pudieron cargar los documentos: ' + error.message);
+          setDocuments([]);
+        } else setDocuments(data || []);
+        setDocumentsLoading(false);
+      };
+
+      const loadUsers = async () => {
+        setLoadingUsers(true);
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id,email,nombre,apellido,"Role"')
+          .order('email', { ascending: true });
+
+        if (error) {
+          setUsers([]);
+          setError('No se pudieron cargar los usuarios. Hay que agregar una policy para que Admin/Dueño puedan ver la lista.');
+        } else {
+          setUsers((data || []).filter(u => u.id !== user.id));
+        }
+        setLoadingUsers(false);
+      };
+
+      const savePersonalInfo = async (e) => {
+        e.preventDefault();
+        setLoading(true); setError(''); setMessage('');
+
+        const { error: profileError } = await supabase.from('profiles').update({
+          nombre: firstName,
+          apellido: lastName,
+          telefono: phone
+        }).eq('id', user.id);
+
+        if (profileError) {
+          setLoading(false);
+          setError(profileError.message);
+          return;
+        }
+
+        const { error: authError } = await supabase.auth.updateUser({
+          data: { first_name: firstName, last_name: lastName, full_name: `${firstName} ${lastName}`.trim(), phone }
+        });
+
+        setLoading(false);
+        if (authError) setError(authError.message);
+        else setMessage('Información actualizada correctamente.');
+      };
+
+      const changePassword = async (e) => {
+        e.preventDefault();
+        setLoading(true); setError(''); setMessage('');
+        if (newPassword.length < 6) { setLoading(false); setError('La nueva contraseña debe tener al menos 6 caracteres.'); return; }
+        if (newPassword !== repeatNewPassword) { setLoading(false); setError('Las nuevas contraseñas no coinciden.'); return; }
+
+        const { error: loginError } = await supabase.auth.signInWithPassword({ email: user.email, password: currentPassword });
+        if (loginError) { setLoading(false); setError('La contraseña actual es incorrecta.'); return; }
+
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        setLoading(false);
+        if (error) setError(error.message);
+        else {
+          setMessage('Contraseña actualizada correctamente.');
+          setCurrentPassword(''); setNewPassword(''); setRepeatNewPassword('');
+        }
+      };
+
+      const toggleNotifications = (value) => {
+        setNotifications(value);
+        localStorage.setItem('weblock_notifications', String(value));
+      };
+
+      const changeRingtone = (value) => {
+        setRingtone(value);
+        localStorage.setItem('weblock_ringtone', value);
+      };
+
+      const playRingtone = () => {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const frequencies = { classic: 880, soft: 660, digital: 1200 };
+          osc.frequency.value = frequencies[ringtone] || 880;
+          osc.type = ringtone === 'digital' ? 'square' : 'sine';
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+          osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.35);
+        } catch (_) {}
+      };
+
+      const toggleUser = (id) => {
+        setSelectedUserIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+      };
+
+      const uploadDocument = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file || !canManageDocuments) return;
+
+        if (visibility === 'specific' && selectedUserIds.length === 0) {
+          setError('Elegí al menos un usuario para este documento.');
+          e.target.value = '';
+          return;
+        }
+
+        setUploading(true); setError(''); setMessage('');
+
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const storagePath = `${user.id}/${Date.now()}_${safeName}`;
+
+        const { error: uploadError } = await supabase.storage.from('documents').upload(storagePath, file, { upsert: false });
+        if (uploadError) {
+          setUploading(false); setError(uploadError.message); e.target.value = ''; return;
+        }
+
+        const { data: doc, error: dbError } = await supabase.from('documents').insert({
+          name: file.name,
+          storage_path: storagePath,
+          uploaded_by: user.id,
+          visibility: visibility === 'specific' ? 'specific' : visibility
+        }).select().single();
+
+        if (dbError) {
+          await supabase.storage.from('documents').remove([storagePath]);
+          setUploading(false); setError(dbError.message); e.target.value = ''; return;
+        }
+
+        if (visibility === 'specific') {
+          const permissions = selectedUserIds.map(userId => ({ document_id: doc.id, user_id: userId }));
+          const { error: permissionsError } = await supabase.from('document_permissions').insert(permissions);
+
+          if (permissionsError) {
+            await supabase.from('documents').delete().eq('id', doc.id);
+            await supabase.storage.from('documents').remove([storagePath]);
+            setUploading(false); setError(permissionsError.message); e.target.value = ''; return;
+          }
+        }
+
+        setUploading(false);
+        setMessage('Documento subido correctamente.');
+        setSelectedUserIds([]);
+        setVisibility('all');
+        await loadDocuments();
+        e.target.value = '';
+      };
+
+      const getStoragePath = (doc) => {
+        let storagePath = String(doc?.storage_path || doc?.path || '').replace(/^\/+/, '');
+        if (storagePath.startsWith('documents/')) storagePath = storagePath.slice('documents/'.length);
+        return storagePath;
+      };
+
+      const openDocument = async (doc) => {
+        setError('');
+        const storagePath = getStoragePath(doc);
+        if (!storagePath) { setError('Este documento no tiene una ruta válida.'); return; }
+
+        const { data, error } = await supabase.storage.from('documents').createSignedUrl(storagePath, 300);
+        if (error || !data?.signedUrl) {
+          console.error('Error abriendo documento:', { doc, storagePath, error });
+          setError('No se pudo abrir el documento. La ruta guardada no coincide con el archivo del bucket.');
+          return;
+        }
+        window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+      };
+
+      const deleteDocument = async (doc) => {
+        if (!canManageDocuments) return;
+        if (!window.confirm(`¿Querés eliminar \"${doc.name}\"?`)) return;
+
+        setError('');
+        setMessage('');
+        const storagePath = getStoragePath(doc);
+
+        const { error: storageError } = await supabase.storage.from('documents').remove([storagePath]);
+        if (storageError) {
+          console.error(storageError);
+          setError('No se pudo eliminar el archivo: ' + storageError.message);
+          return;
+        }
+
+        const { error: dbError } = await supabase.from('documents').delete().eq('id', doc.id);
+        if (dbError) {
+          setError('El archivo se eliminó de Storage, pero no su registro: ' + dbError.message);
+          await loadDocuments();
+          return;
+        }
+
+        setMessage('Documento eliminado correctamente.');
+        await loadDocuments();
+      };
+
+      const roleLabel = normalizedRole === 'dueño' || normalizedRole === 'owner' ? 'Dueño'
+        : normalizedRole === 'admin' ? 'Administrador' : 'Cliente';
+
+      const titleMap = {
+        informacion: ['Información personal', 'Tus datos personales y de contacto'],
+        seguridad: ['Seguridad', 'Cambiá tu contraseña de acceso'],
+        notificaciones: ['Notificaciones', 'Configurá cómo querés recibir avisos'],
+        documentos: ['Documentos', 'Contratos, informes y comprobantes']
+      };
+
+      useEffect(() => {
+        if (section === 'soporte') {
+          const supportNumber = '549XXXXXXXXXX';
+          window.open(`https://wa.me/${supportNumber}?text=${encodeURIComponent('Hola, necesito ayuda con WeBlock.')}`, '_blank', 'noopener,noreferrer');
+          onBack();
+        }
+      }, [section]);
+
+      if (section === 'soporte') return null;
+      const [title, subtitle] = titleMap[section] || ['', ''];
+
+      return (
+        <div className="space-y-5 animate-fadeIn pb-8">
+          <div className="flex items-center gap-3">
+            <button onClick={onBack} className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-xl">‹</button>
+            <div><h1 className="text-3xl font-extrabold text-white">{title}</h1><p className="text-xs text-slate-400 mt-1">{subtitle}</p></div>
+          </div>
+
+          {message && <div className="p-3 rounded-xl bg-emerald-950/50 border border-emerald-800/50 text-emerald-400 text-xs">✓ {message}</div>}
+          {error && <div className="p-3 rounded-xl bg-red-950/50 border border-red-800/50 text-red-400 text-xs">{error}</div>}
+
+          {section === 'informacion' && (
+            <form onSubmit={savePersonalInfo} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+              {[
+                ['Nombre', firstName, setFirstName, 'Ej: Axel'],
+                ['Apellido', lastName, setLastName, 'Ej: DiBella'],
+                ['Mail', user.email || '', () => {}, 'tu@email.com']
+              ].map(([label, value, setter, placeholder]) => (
+                <div key={label}>
+                  <label className="text-[11px] text-slate-400 block mb-1">{label}</label>
+                  <input value={value} onChange={e => setter(e.target.value)} disabled={label === 'Mail'} placeholder={placeholder} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500 disabled:opacity-60" />
+                </div>
+              ))}
+              <div>
+                <label className="text-[11px] text-slate-400 block mb-1">Número de teléfono</label>
+                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="Opcional" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="text-[11px] text-slate-400 block mb-1">Qué sos</label>
+                <select value={normalizedRole === 'dueño' || normalizedRole === 'owner' ? 'dueño' : normalizedRole === 'admin' ? 'admin' : 'cliente'} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none opacity-70">
+                  <option value="cliente">Cliente</option><option value="admin">Administrador</option><option value="dueño">Dueño</option>
+                </select>
+                <p className="text-[9px] text-slate-500 mt-1">El rol lo administra WeBlock y no puede modificarse desde este perfil.</p>
+              </div>
+              <button disabled={loading} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm disabled:opacity-50">{loading ? 'Guardando...' : 'Guardar cambios'}</button>
+            </form>
+          )}
+
+          {section === 'seguridad' && (
+            <form onSubmit={changePassword} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+              <div><label className="text-[11px] text-slate-400 block mb-1">Contraseña actual</label><input type="password" required value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <div><label className="text-[11px] text-slate-400 block mb-1">Nueva contraseña</label><input type="password" required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <div><label className="text-[11px] text-slate-400 block mb-1">Repetir nueva contraseña</label><input type="password" required value={repeatNewPassword} onChange={e => setRepeatNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <button disabled={loading} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm disabled:opacity-50">{loading ? 'Actualizando...' : 'Cambiar contraseña'}</button>
+            </form>
+          )}
+
+          {section === 'notificaciones' && (
+            <div className="space-y-3">
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
+                <div><p className="text-sm font-bold text-white">Notificaciones</p><p className="text-[10px] text-slate-400 mt-1">Recibir avisos de movimientos y proyectos.</p></div>
+                <button onClick={() => toggleNotifications(!notifications)} className={`w-12 h-7 rounded-full p-1 transition ${notifications ? 'bg-blue-600' : 'bg-slate-700'}`}><span className={`block w-5 h-5 rounded-full bg-white transition ${notifications ? 'translate-x-5' : ''}`}></span></button>
+              </div>
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5">
+                <label className="text-sm font-bold text-white block mb-2">Tono de notificación</label>
+                <div className="flex gap-2"><select value={ringtone} onChange={e => changeRingtone(e.target.value)} disabled={!notifications} className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-sm"><option value="classic">Clásico</option><option value="soft">Suave</option><option value="digital">Digital</option></select><button onClick={playRingtone} disabled={!notifications} className="px-4 rounded-xl bg-blue-950 text-blue-400 border border-blue-800 disabled:opacity-40">▶</button></div>
+              </div>
+            </div>
+          )}
+
+          {section === 'documentos' && (
+            <div className="space-y-3">
+              {canManageDocuments && (
+                <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div><p className="text-sm font-bold text-white">Subir documento</p><p className="text-[10px] text-slate-400">PDF, Word y otros archivos.</p></div>
+                    <span className="text-blue-400">↑</span>
+                  </div>
+                  <div>
+                    <label className="text-[11px] text-slate-400 block mb-1">Quién puede verlo</label>
+                    <select value={visibility} onChange={e => { setVisibility(e.target.value); setSelectedUserIds([]); }} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-xs">
+                      <option value="all">Todos los usuarios</option>
+                      <option value="admins">Solo dueño y administradores</option>
+                      <option value="specific">Usuarios específicos</option>
+                    </select>
+                  </div>
+                  {visibility === 'specific' && (
+                    <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
+                      <p className="text-[11px] font-bold text-white mb-2">Elegí quiénes pueden verlo</p>
+                      {loadingUsers ? <p className="text-[10px] text-slate-500">Cargando usuarios...</p> :
+                       users.length === 0 ? <p className="text-[10px] text-slate-500">No hay usuarios disponibles.</p> :
+                       <div className="space-y-2 max-h-48 overflow-y-auto">
+                         {users.map(u => (
+                           <label key={u.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-900 cursor-pointer">
+                             <input type="checkbox" checked={selectedUserIds.includes(u.id)} onChange={() => toggleUser(u.id)} className="accent-blue-600" />
+                             <div className="min-w-0">
+                               <p className="text-xs text-white truncate">{u.nombre || u.apellido ? `${u.nombre || ''} ${u.apellido || ''}`.trim() : 'Sin nombre'}</p>
+                               <p className="text-[9px] text-slate-500 truncate">{u.email}</p>
+                             </div>
+                           </label>
+                         ))}
+                       </div>}
+                    </div>
+                  )}
+                  <label className={`w-full block text-center px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold cursor-pointer ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                    {uploading ? 'Subiendo...' : 'Elegir archivo'}
+                    <input type="file" onChange={uploadDocument} disabled={uploading} className="hidden" />
+                  </label>
+                </div>
+              )}
+
+              {documentsLoading ? <div className="text-center text-slate-500 text-xs py-8">Cargando documentos...</div> :
+               documents.length === 0 ? <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center text-slate-500 text-xs">Todavía no hay documentos disponibles.</div> :
+               documents.map(doc => (
+                 <div key={doc.id} onClick={() => openDocument(doc)} className="w-full bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between text-left hover:bg-slate-800/60 transition cursor-pointer">
+                   <div className="flex items-center gap-3 min-w-0">
+                     <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 shrink-0">📄</div>
+                     <div className="min-w-0"><p className="text-xs font-bold text-white truncate max-w-[210px]">{doc.name}</p>
+                       <p className="text-[9px] text-slate-500">{doc.visibility === 'all' ? 'Visible para todos' : doc.visibility === 'admins' ? 'Solo dueño/admin' : 'Usuarios seleccionados'} · {new Date(doc.created_at).toLocaleDateString('es-AR')}</p>
+                     </div>
+                   </div>
+                   <div className="flex items-center gap-2 shrink-0">
+                     {canManageDocuments && <button type="button" title="Eliminar documento" onClick={(e) => { e.stopPropagation(); deleteDocument(doc); }} className="w-8 h-8 rounded-full bg-red-950/60 border border-red-900/60 text-red-400 hover:bg-red-900/70 flex items-center justify-center text-lg font-bold">×</button>}
+                     <span className="text-slate-400">›</span>
+                   </div>
+                 </div>
+               ))}
+            </div>
+          )}
+        </div>
+      );
+    };
+
     // --- APP PRINCIPAL COMPLETA ---
     const App = () => {
       const [user, setUser] = useState(null);
+      const [profile, setProfile] = useState(null);
       const [activeTab, setActiveTab] = useState('proyectos');
       const [selectedProject, setSelectedProject] = useState(null);
       const [movFilter, setMovFilter] = useState('Todos');
+      const [profileSection, setProfileSection] = useState(null);
+
+      const loadProfile = async (currentUser) => {
+        if (!currentUser) { setProfile(null); return; }
+        const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+        if (error) console.error('Error cargando perfil:', error);
+        setProfile(data || null);
+      };
 
       useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-          if (session) setUser(session.user);
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          loadProfile(currentUser);
         });
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-          setUser(session?.user ?? null);
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          loadProfile(currentUser);
         });
 
         return () => subscription.unsubscribe();
@@ -383,17 +869,19 @@
         return <AuthScreen onAuthSuccess={(u) => setUser(u)} />;
       }
 
-      const userName = user.user_metadata?.first_name || 'Axel';
-      const userFullName = user.user_metadata?.full_name || 'Axel DiBella';
+      const userName = profile?.nombre || user.user_metadata?.first_name || 'Usuario';
+      const userFullName = `${profile?.nombre || user.user_metadata?.first_name || ''} ${profile?.apellido || user.user_metadata?.last_name || ''}`.trim() || 'Usuario';
+      const rawRole = profile?.Role || profile?.role || 'cliente';
+      const normalizedRole = String(rawRole).toLowerCase();
+      const roleLabel = normalizedRole === 'dueño' || normalizedRole === 'owner' ? 'Dueño' : normalizedRole === 'admin' ? 'Administrador' : 'Cliente';
 
       return (
         <div className="w-full h-full flex flex-col md:flex-row bg-[#030816] overflow-hidden relative">
           
           {/* BARRA LATERAL (PC) */}
-          <aside className="hidden md:flex flex-col w-64 border-r border-slate-800/80 p-6 space-y-8 bg-[#020510] shrink-0">
-            <div className="flex items-center gap-3">
+          <aside className="hidden md:flex flex-col w-[330px] border-r border-slate-800/70 px-8 py-9 space-y-10 bg-[#020510] shrink-0">
+            <div className="flex items-center">
               <WeBlockLogo />
-              <span className="text-xl font-bold tracking-wider">We<span className="text-blue-500">Block</span></span>
             </div>
 
             <nav className="flex flex-col space-y-2">
@@ -419,13 +907,12 @@
           </aside>
 
           {/* CONTENIDO PRINCIPAL */}
-          <main className={`flex-1 overflow-y-auto w-full max-w-2xl mx-auto p-4 md:p-8 pb-28 ${selectedProject === 'Distrito Verde' ? 'bg-[#02120b]' : ''}`}>
+          <main className={`flex-1 overflow-y-auto w-full max-w-none mx-auto p-4 md:p-8 lg:p-10 pb-28 ${selectedProject === 'Distrito Verde' ? 'bg-[#02120b]' : ''}`}>
             
             {/* LOGO DE MARCA SUPERIOR MÓVIL */}
             {!selectedProject && (
-              <div className="flex items-center gap-2.5 mb-5 md:hidden">
+              <div className="flex items-center mb-3 md:hidden">
                 <WeBlockLogo />
-                <span className="text-2xl font-extrabold tracking-tight">We<span className="text-blue-500">Block</span></span>
               </div>
             )}
 
@@ -572,91 +1059,129 @@
               <>
                 {/* ==================== VISTA: INICIO ==================== */}
                 {activeTab === 'inicio' && (
-                  <div className="space-y-5 animate-fadeIn">
-                    <div>
-                      <p className="text-slate-300 text-sm">Buenos días,</p>
-                      <h1 className="text-4xl font-extrabold text-white tracking-tight mt-0.5">{userName}</h1>
-                      <p className="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Patrimonio actualizado hoy 14:36
-                      </p>
+                  <div className="home-dashboard animate-fadeIn overflow-hidden">
+
+                    {/* HERO */}
+                    <section className="home-hero relative overflow-hidden rounded-b-[34px] md:rounded-[0_0_36px_36px]">
+                      <div className="absolute inset-0 bg-[#020b24]"></div>
+
+                      <div
+                        className="absolute inset-0 opacity-65"
+                        style={{
+                          backgroundImage: "linear-gradient(90deg, #020b24 0%, rgba(2,11,36,.90) 22%, rgba(2,11,36,.32) 68%, rgba(2,11,36,.08) 100%), linear-gradient(180deg, rgba(0,45,130,.22), rgba(0,10,30,.55)), url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1800&q=88')",
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      ></div>
+
+                      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030816] to-transparent"></div>
+
+                      <div className="relative z-10 px-1 md:px-6 lg:px-8 pt-4 md:pt-7 pb-8">
+                        <div className="mb-10 md:mb-12">
+                          <WeBlockLogo />
+                        </div>
+
+                        <p className="text-[20px] md:text-[23px] leading-none font-light text-slate-200">Buenos días,</p>
+                        <h1 className="text-[48px] md:text-[60px] lg:text-[64px] leading-[1.02] font-extrabold tracking-tight text-white mt-1">{userName}</h1>
+
+                        <p className="text-[11px] md:text-[13px] text-slate-400 mt-4 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0z" />
+                          </svg>
+                          Patrimonio actualizado hoy 14:36
+                        </p>
+                      </div>
+                    </section>
+
+                    <div className="px-0 md:px-1 lg:px-0 space-y-3">
+
+                      {/* MI PATRIMONIO */}
+                      <div className="home-patrimony relative overflow-hidden rounded-[27px] border border-blue-500/70 bg-gradient-to-br from-[#07388e]/90 via-[#06275f]/90 to-[#031331] px-6 md:px-9 py-7 md:py-8 shadow-[0_0_30px_rgba(0,94,255,.12)]">
+                        <div className="absolute -right-12 -top-16 w-52 h-52 rounded-full bg-blue-500/10 blur-3xl"></div>
+                        <p className="relative text-[13px] md:text-[15px] font-semibold tracking-wide text-blue-300 uppercase mb-5">MI PATRIMONIO</p>
+                        <h2 className="relative text-[42px] md:text-[54px] lg:text-[58px] leading-none font-extrabold tracking-tight text-white">$245.300.000</h2>
+                        <div className="relative mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#062c62] border border-blue-500/20">
+                          <span className="text-[21px] text-emerald-400 leading-none">↑</span>
+                          <span className="text-[15px] md:text-[17px] font-bold text-emerald-400">+12,4%</span>
+                          <span className="text-[13px] md:text-[14px] text-slate-200">este año</span>
+                        </div>
+                      </div>
+
+                      {/* TRES RESUMENES - 3 COLUMNAS EN PC / VERTICAL EN CELULAR */}
+                      <div className="home-stats-grid">
+
+                        {/* PRÓXIMO COBRO */}
+                        <div className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
+                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="17" rx="3" strokeWidth="1.8"/><path strokeWidth="1.8" d="M7 2v4m10-4v4M3 9h18M8 13h3m-3 4h5"/>
+                              </svg>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-[11px] text-blue-400 uppercase font-semibold">PRÓXIMO COBRO</p>
+                              <p className="text-[18px] md:text-[19px] leading-tight font-bold text-white mt-1">15 de Agosto</p>
+                              <p className="text-[11px] text-slate-400 mt-1">en 18 días</p>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-[10px] text-blue-400 uppercase font-semibold">MONTO</p>
+                            <p className="text-[17px] md:text-[19px] font-bold text-blue-400 mt-1">$2.350.000</p>
+                          </div>
+                        </div>
+
+                        {/* ÚLTIMO MOVIMIENTO */}
+                        <div onClick={() => setActiveTab('movimientos')} className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#06204a] transition">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
+                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" strokeWidth="1.8"/><path strokeWidth="1.8" d="M12 7v5l3 2"/>
+                              </svg>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-[11px] text-blue-400 uppercase font-semibold">ÚLTIMO MOVIMIENTO</p>
+                              <p className="text-[16px] md:text-[17px] font-bold text-white mt-1 truncate">Cobro de rentabilidad</p>
+                              <p className="text-[11px] text-slate-400 mt-1">Proyecto Torre Norte</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <div className="text-right">
+                              <p className="text-[15px] md:text-[17px] font-bold text-emerald-400">+$350.000</p>
+                              <p className="text-[10px] text-slate-400 mt-1">15 Jul 2024</p>
+                            </div>
+                            <span className="text-white text-2xl font-light">›</span>
+                          </div>
+                        </div>
+
+                        {/* ESTADO GENERAL */}
+                        <div className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
+                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" d="M4 21h16M6 21V8l6-4 6 4v13M9 12h1m-1 4h1m4-4h1m-1 4h1"/>
+                              </svg>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-[11px] text-blue-400 uppercase font-semibold">ESTADO GENERAL</p>
+                              <p className="text-[16px] md:text-[17px] font-bold text-white mt-1">Activos y en desarrollo</p>
+                              <p className="text-[11px] text-slate-400 mt-1">Rendimiento anual: <span className="text-emerald-400 font-bold">+12,4%</span></p>
+                            </div>
+                          </div>
+
+                          <div className="relative w-[72px] h-[72px] rounded-full flex items-center justify-center shrink-0" style={{background:'conic-gradient(#1685ff 0deg 285deg, #0a2858 285deg 360deg)'}}>
+                            <div className="w-[57px] h-[57px] rounded-full bg-[#04183b] flex items-center justify-center text-center">
+                              <div><span className="text-[18px] font-bold text-white block leading-none">12</span><span className="text-[8px] text-slate-400 leading-tight">proyectos<br/>activos</span></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* CTA */}
+                      <button onClick={() => setActiveTab('proyectos')} className="w-full py-4 rounded-[18px] bg-gradient-to-r from-[#0756d9] to-[#176df3] border border-blue-400/70 text-white font-bold text-[16px] md:text-[17px] shadow-[0_8px_30px_rgba(0,91,255,.35)] flex items-center justify-center gap-3 hover:brightness-110 transition">
+                        <span>Ver mis inversiones</span>
+                        <span className="text-3xl leading-none font-light">›</span>
+                      </button>
                     </div>
-
-                    {/* Tarjeta MI PATRIMONIO */}
-                    <div className="bg-gradient-to-br from-blue-900/60 via-slate-900 to-slate-950 border border-blue-500/40 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                      <p className="text-[11px] font-bold tracking-wider text-blue-300 uppercase mb-2">MI PATRIMONIO</p>
-                      <h2 className="text-3xl md:text-4xl font-black text-white">$245.300.000</h2>
-                      <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/80 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
-                        <span>↑ +12,4%</span> <span className="text-slate-300 font-normal">este año</span>
-                      </div>
-                    </div>
-
-                    {/* Próximo cobro */}
-                    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400">
-                          📅
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">PRÓXIMO COBRO</p>
-                          <p className="text-base font-bold text-white">15 de Agosto</p>
-                          <p className="text-[10px] text-slate-400">en 18 días</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] text-slate-400 uppercase font-semibold">MONTO ESTIMADO</p>
-                        <p className="text-base font-bold text-blue-400">$2.350.000</p>
-                      </div>
-                    </div>
-
-                    {/* Último movimiento */}
-                    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-slate-800/50 transition" onClick={() => setActiveTab('movimientos')}>
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400">
-                          🕒
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">ÚLTIMO MOVIMIENTO</p>
-                          <p className="text-sm font-bold text-white">Cobro de rentabilidad</p>
-                          <p className="text-[10px] text-slate-400">Proyecto Torre Norte</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-right">
-                          <p className="text-sm font-bold text-emerald-400">+$350.000</p>
-                          <p className="text-[10px] text-slate-400">15 Jul 2024</p>
-                        </div>
-                        <span className="text-slate-400 text-lg">›</span>
-                      </div>
-                    </div>
-
-                    {/* Estado General */}
-                    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400">
-                          🏢
-                        </div>
-                        <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-semibold">ESTADO GENERAL</p>
-                          <p className="text-sm font-bold text-white">Activos y en desarrollo</p>
-                          <p className="text-[10px] text-slate-400">Rendimiento anual: <span className="text-emerald-400 font-bold">+12,4%</span></p>
-                        </div>
-                      </div>
-
-                      {/* Círculo indicador */}
-                      <div className="relative w-14 h-14 flex items-center justify-center bg-slate-950 rounded-full border-2 border-blue-500">
-                        <div className="text-center">
-                          <span className="text-sm font-bold text-white block leading-none">12</span>
-                          <span className="text-[7px] text-slate-400 leading-none">proyectos<br/>activos</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Botón Ver mis inversiones */}
-                    <button onClick={() => setActiveTab('proyectos')} className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition">
-                      <span>Ver mis inversiones</span>
-                      <span className="text-lg">›</span>
-                    </button>
                   </div>
                 )}
 
@@ -922,112 +1447,40 @@
 
                 {/* ==================== VISTA: PERFIL ==================== */}
                 {activeTab === 'perfil' && (
-                  <div className="space-y-5 animate-fadeIn">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h1 className="text-4xl font-extrabold text-white">Perfil</h1>
-                        <p className="text-xs text-slate-400 mt-1">Gestioná tu cuenta y preferencias</p>
+                  profileSection ? (
+                    <ProfileSection section={profileSection} user={user} profile={profile} onBack={() => setProfileSection(null)} />
+                  ) : (
+                    <div className="space-y-5 animate-fadeIn">
+                      <div className="flex justify-between items-center">
+                        <div><h1 className="text-4xl font-extrabold text-white">Perfil</h1><p className="text-xs text-slate-400 mt-1">Gestioná tu cuenta y preferencias</p></div>
+                        <button onClick={() => setProfileSection('notificaciones')} className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg font-bold">🔔</button>
                       </div>
-                      <button className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg font-bold">
-                        🔔
-                      </button>
+
+                      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4"><div className="w-16 h-16 rounded-full bg-blue-950 border-2 border-blue-500 flex items-center justify-center text-2xl">👤</div><div><h2 className="text-xl font-bold text-white">{userFullName}</h2><p className="text-xs text-slate-400">{user.email}</p><div className="flex items-center gap-1 mt-1 text-blue-400 text-xs font-semibold"><span>✓ Cuenta verificada</span><span className="text-slate-500">· {roleLabel}</span></div></div></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800"><div><p className="text-[10px] text-slate-400">Patrimonio total</p><p className="text-base font-bold text-white">$245.300.000</p></div><div><p className="text-[10px] text-slate-400">Inversiones activas</p><p className="text-base font-bold text-white">8</p></div></div>
+                      </div>
+
+                      <div className="space-y-2">
+                        {[
+                          { id: 'informacion', title: 'Información personal', sub: 'Nombre, apellido, teléfono y tipo de cuenta', icon: '👤' },
+                          { id: 'seguridad', title: 'Seguridad', sub: 'Cambiar contraseña de acceso', icon: '🛡️' },
+                          { id: 'notificaciones', title: 'Notificaciones', sub: 'Activar, desactivar y elegir tono', icon: '🔔' },
+                          { id: 'documentos', title: 'Documentos', sub: 'Contratos, informes y comprobantes', icon: '📄' },
+                          { id: 'soporte', title: 'Ayuda y soporte', sub: 'Contactá al soporte por WhatsApp', icon: '❓' }
+                        ].map(item => (
+                          <button key={item.id} onClick={() => setProfileSection(item.id)} className="w-full bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between text-left hover:bg-slate-800/60 transition">
+                            <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-base">{item.icon}</div><div><p className="text-xs font-bold text-white">{item.title}</p><p className="text-[10px] text-slate-400">{item.sub}</p></div></div><span className="text-slate-400 text-base">›</span>
+                          </button>
+                        ))}
+                        <div onClick={() => supabase.auth.signOut()} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:bg-red-950/30 transition"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-red-950/80 border border-red-800/50 flex items-center justify-center text-red-400 text-base">🚪</div><div><p className="text-xs font-bold text-white">Cerrar sesión</p><p className="text-[10px] text-slate-400">Salir de tu cuenta de WeBlock</p></div></div><span className="text-slate-400 text-base">›</span></div>
+                      </div>
+
+                      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">🎧</div><div><p className="text-xs font-bold text-white">¿Necesitás ayuda?</p><p className="text-[10px] text-slate-400">Nuestro equipo está disponible<br/>de Lunes a Viernes de 9 a 18 hs.</p></div></div><button onClick={() => setProfileSection('soporte')} className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30">Contactar soporte</button></div>
                     </div>
-
-                    {/* Tarjeta Usuario */}
-                    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" className="w-16 h-16 rounded-full object-cover border-2 border-blue-500" />
-                          <div>
-                            <h2 className="text-xl font-bold text-white">{userFullName}</h2>
-                            <p className="text-xs text-slate-400">{user.email}</p>
-                            <div className="flex items-center gap-1 mt-1 text-blue-400 text-xs font-semibold">
-                              <span>✓ Inversor verificado</span>
-                            </div>
-                            <p className="text-[10px] text-slate-500">Miembro desde Marzo 2022</p>
-                          </div>
-                        </div>
-                        <span className="text-slate-400 text-xl">›</span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">
-                            📊
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-slate-400 font-medium">Patrimonio total</p>
-                            <p className="text-base font-bold text-white">$245.300.000</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">
-                            🏢
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-slate-400 font-medium">Inversiones activas</p>
-                            <p className="text-base font-bold text-white">8</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Lista Opciones */}
-                    <div className="space-y-2">
-                      {[
-                        { title: 'Información personal', sub: 'Datos de contacto y seguridad', icon: '👤' },
-                        { title: 'Seguridad', sub: 'Contraseña, verificación en dos pasos', icon: '🛡️' },
-                        { title: 'Notificaciones', sub: 'Preferencias y ajustes', icon: '🔔' },
-                        { title: 'Documentos', sub: 'Contratos, informes y comprobantes', icon: '📄' },
-                        { title: 'Ayuda y soporte', sub: 'Centro de ayuda y contacto', icon: '❓' }
-                      ].map((item, idx) => (
-                        <div key={idx} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:bg-slate-800/50 transition">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-base">
-                              {item.icon}
-                            </div>
-                            <div>
-                              <p className="text-xs font-bold text-white">{item.title}</p>
-                              <p className="text-[10px] text-slate-400">{item.sub}</p>
-                            </div>
-                          </div>
-                          <span className="text-slate-400 text-base">›</span>
-                        </div>
-                      ))}
-
-                      {/* Cerrar Sesión */}
-                      <div onClick={() => supabase.auth.signOut()} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:bg-red-950/30 transition">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-red-950/80 border border-red-800/50 flex items-center justify-center text-red-400 text-base">
-                            🚪
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-white">Cerrar sesión</p>
-                            <p className="text-[10px] text-slate-400">Salir de tu cuenta de WeBlock</p>
-                          </div>
-                        </div>
-                        <span className="text-slate-400 text-base">›</span>
-                      </div>
-                    </div>
-
-                    {/* ¿Necesitás ayuda? */}
-                    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">
-                          🎧
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white">¿Necesitás ayuda?</p>
-                          <p className="text-[10px] text-slate-400">Nuestro equipo está disponible<br/>de Lunes a Viernes de 9 a 18 hs.</p>
-                        </div>
-                      </div>
-                      <button className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30">
-                        Contactar soporte
-                      </button>
-                    </div>
-
-                  </div>
+                  )
                 )}
               </>
             )}
