@@ -108,10 +108,10 @@
        ========================================================= */
 
     .weblock-logo-crop {
-      width: 200px;
-      height: 100px;
+      width: 188px;
+      height: 52px;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -119,7 +119,7 @@
     }
 
     .weblock-logo-image {
-      width: 188px;
+      width: 120px;
       height: auto;
       max-width: none;
       display: block;
@@ -131,6 +131,7 @@
     .weblock-logo-large {
       width: 220px;
       height: 64px;
+      overflow: visible;
     }
 
     .weblock-logo-large .weblock-logo-image {
@@ -164,8 +165,9 @@
 
     @media (max-width: 767px) {
       .weblock-logo-crop {
-        width: 158px;
+        width: 175px;
         height: 48px;
+        overflow: visible;
       }
 
       .weblock-logo-image {
@@ -221,7 +223,7 @@
     const WeBlockLogo = ({ large = false }) => (
       <div className={`weblock-logo-crop ${large ? 'weblock-logo-large' : ''}`}>
         <img
-          src="./Logo2.png"
+          src="./LogoWeBlock.png"
           alt="WeBlock"
           className="weblock-logo-image"
         />
@@ -347,7 +349,6 @@
         <div className="fixed inset-0 bg-[#030816] z-50 flex flex-col justify-center px-6 overflow-y-auto py-8">
           <div className="flex flex-col items-center mb-6">
             <WeBlockLogo />
-            <h1 className="text-3xl font-bold tracking-tight mt-2">We<span className="text-blue-500">Block</span></h1>
             <p className="text-xs text-slate-400 mt-1">{isLogin ? 'Ingresá a tu cuenta' : 'Creá tu cuenta de inversor'}</p>
           </div>
 
@@ -469,6 +470,7 @@
       const rawRole = profile?.Role || profile?.role || 'cliente';
       const normalizedRole = String(rawRole).toLowerCase();
       const canManageDocuments = ['admin', 'dueño', 'owner'].includes(normalizedRole);
+      const canAccessAdministration = ['admin', 'dueño', 'owner'].includes(normalizedRole);
 
       const [firstName, setFirstName] = useState(profile?.nombre || user?.user_metadata?.first_name || '');
       const [lastName, setLastName] = useState(profile?.apellido || user?.user_metadata?.last_name || '');
@@ -487,13 +489,19 @@
       const [users, setUsers] = useState([]);
       const [selectedUserIds, setSelectedUserIds] = useState([]);
       const [loadingUsers, setLoadingUsers] = useState(false);
+      const [adminUsers, setAdminUsers] = useState([]);
+      const [adminLoading, setAdminLoading] = useState(false);
+      const [adminLastUpdate, setAdminLastUpdate] = useState(null);
 
       useEffect(() => {
         if (section === 'documentos') {
           loadDocuments();
           if (canManageDocuments) loadUsers();
         }
-      }, [section, canManageDocuments]);
+        if (section === 'administracion' && canAccessAdministration) {
+          loadAdministration();
+        }
+      }, [section, canManageDocuments, canAccessAdministration]);
 
       const loadDocuments = async () => {
         setDocumentsLoading(true);
@@ -520,6 +528,24 @@
           setUsers((data || []).filter(u => u.id !== user.id));
         }
         setLoadingUsers(false);
+      };
+
+      const loadAdministration = async () => {
+        setAdminLoading(true);
+        setError('');
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('email', { ascending: true });
+
+        if (error) {
+          setAdminUsers([]);
+          setError('No se pudieron cargar los usuarios registrados: ' + error.message);
+        } else {
+          setAdminUsers(data || []);
+          setAdminLastUpdate(new Date());
+        }
+        setAdminLoading(false);
       };
 
       const savePersonalInfo = async (e) => {
@@ -697,7 +723,8 @@
         informacion: ['Información personal', 'Tus datos personales y de contacto'],
         seguridad: ['Seguridad', 'Cambiá tu contraseña de acceso'],
         notificaciones: ['Notificaciones', 'Configurá cómo querés recibir avisos'],
-        documentos: ['Documentos', 'Contratos, informes y comprobantes']
+        documentos: ['Documentos', 'Contratos, informes y comprobantes'],
+        administracion: ['Administración', 'Usuarios, roles e información de la cuenta']
       };
 
       useEffect(() => {
@@ -709,7 +736,14 @@
       }, [section]);
 
       if (section === 'soporte') return null;
+      if (section === 'administracion' && !canAccessAdministration) {
+        onBack();
+        return null;
+      }
       const [title, subtitle] = titleMap[section] || ['', ''];
+
+      const userFullNameSafe = (p, currentUser) =>
+        `${p?.nombre || currentUser?.user_metadata?.first_name || ''} ${p?.apellido || currentUser?.user_metadata?.last_name || ''}`.trim() || 'Usuario';
 
       return (
         <div className="space-y-5 animate-fadeIn pb-8">
@@ -766,6 +800,66 @@
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5">
                 <label className="text-sm font-bold text-white block mb-2">Tono de notificación</label>
                 <div className="flex gap-2"><select value={ringtone} onChange={e => changeRingtone(e.target.value)} disabled={!notifications} className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-sm"><option value="classic">Clásico</option><option value="soft">Suave</option><option value="digital">Digital</option></select><button onClick={playRingtone} disabled={!notifications} className="px-4 rounded-xl bg-blue-950 text-blue-400 border border-blue-800 disabled:opacity-40">▶</button></div>
+              </div>
+            </div>
+          )}
+
+          {section === 'administracion' && canAccessAdministration && (
+            <div className="space-y-4">
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">⚙️</div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Información de la cuenta</p>
+                    <p className="text-[10px] text-slate-400">Datos generales de tu cuenta y permisos.</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Nombre</p><p className="text-xs font-bold text-white mt-1">{userFullNameSafe(profile, user)}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Rol</p><p className="text-xs font-bold text-blue-400 mt-1">{roleLabel}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Correo</p><p className="text-xs font-bold text-white mt-1 truncate">{user.email}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Usuarios registrados</p><p className="text-xs font-bold text-white mt-1">{adminLoading ? '...' : adminUsers.length}</p></div>
+                </div>
+                <div className="mt-3 bg-blue-950/30 border border-blue-900/50 rounded-xl p-3">
+                  <p className="text-[10px] text-slate-500">Última actualización del panel</p>
+                  <p className="text-xs font-semibold text-blue-300 mt-1">{adminLastUpdate ? adminLastUpdate.toLocaleString('es-AR') : 'Cargando...'}</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div><p className="text-sm font-bold text-white">Usuarios registrados</p><p className="text-[10px] text-slate-400">Todos los perfiles registrados en WeBlock.</p></div>
+                  <button onClick={loadAdministration} className="w-9 h-9 rounded-xl bg-blue-950/80 border border-blue-800/50 text-blue-400 flex items-center justify-center" title="Actualizar">↻</button>
+                </div>
+                {adminLoading ? <div className="text-center text-slate-500 text-xs py-8">Cargando usuarios...</div> :
+                 adminUsers.length === 0 ? <div className="text-center text-slate-500 text-xs py-8">No hay usuarios registrados.</div> :
+                 <div className="space-y-2 max-h-[420px] overflow-y-auto">
+                   {adminUsers.map(u => {
+                     const uRole = String(u?.Role || u?.role || 'cliente').toLowerCase();
+                     const uRoleLabel = uRole === 'dueño' || uRole === 'owner' ? 'Dueño' : uRole === 'admin' ? 'Administrador' : 'Cliente';
+                     const uName = `${u?.nombre || ''} ${u?.apellido || ''}`.trim() || 'Sin nombre';
+                     const uUpdated = u?.updated_at || u?.created_at;
+                     return (
+                       <div key={u.id} className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
+                         <div className="flex items-center gap-3 min-w-0">
+                           <div className="w-10 h-10 rounded-full bg-blue-950 border border-blue-800/60 flex items-center justify-center text-blue-400 shrink-0">👤</div>
+                           <div className="min-w-0"><p className="text-xs font-bold text-white truncate">{uName}</p><p className="text-[9px] text-slate-500 truncate">{u.email || 'Sin correo'}</p><p className="text-[9px] text-slate-600 mt-0.5">{uUpdated ? `Actualizado: ${new Date(uUpdated).toLocaleDateString('es-AR')}` : 'Sin fecha de actualización'}</p></div>
+                         </div>
+                         <span className={`text-[9px] font-bold px-2 py-1 rounded-full shrink-0 ${uRoleLabel === 'Dueño' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : uRoleLabel === 'Administrador' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>{uRoleLabel}</span>
+                       </div>
+                     );
+                   })}
+                 </div>}
+              </div>
+
+              <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
+                <p className="text-sm font-bold text-white">Permisos de administración</p>
+                <p className="text-[10px] text-slate-400 mt-1 mb-3">El rol define qué funciones puede utilizar cada cuenta.</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Dueño</span><span className="text-[9px] text-emerald-400 font-bold">ACCESO TOTAL</span></div>
+                  <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Administrador</span><span className="text-[9px] text-blue-400 font-bold">ADMINISTRACIÓN</span></div>
+                  <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Cliente</span><span className="text-[9px] text-slate-500 font-bold">SIN ACCESO</span></div>
+                </div>
               </div>
             </div>
           )}
@@ -874,6 +968,7 @@
       const rawRole = profile?.Role || profile?.role || 'cliente';
       const normalizedRole = String(rawRole).toLowerCase();
       const roleLabel = normalizedRole === 'dueño' || normalizedRole === 'owner' ? 'Dueño' : normalizedRole === 'admin' ? 'Administrador' : 'Cliente';
+      const canAccessAdministration = ['admin', 'dueño', 'owner'].includes(normalizedRole);
 
       return (
         <div className="w-full h-full flex flex-col md:flex-row bg-[#030816] overflow-hidden relative">
@@ -909,13 +1004,6 @@
           {/* CONTENIDO PRINCIPAL */}
           <main className={`flex-1 overflow-y-auto w-full max-w-none mx-auto p-4 md:p-8 lg:p-10 pb-28 ${selectedProject === 'Distrito Verde' ? 'bg-[#02120b]' : ''}`}>
             
-            {/* LOGO DE MARCA SUPERIOR MÓVIL */}
-            {!selectedProject && (
-              <div className="flex items-center mb-3 md:hidden">
-                <WeBlockLogo />
-              </div>
-            )}
-
             {/* ==================== VISTA DETALLE: DISTRITO VERDE ==================== */}
             {selectedProject === 'Distrito Verde' ? (
               <div className="space-y-5 animate-fadeIn">
@@ -1077,10 +1165,6 @@
                       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030816] to-transparent"></div>
 
                       <div className="relative z-10 px-1 md:px-6 lg:px-8 pt-4 md:pt-7 pb-8">
-                        <div className="mb-10 md:mb-12">
-                          <WeBlockLogo />
-                        </div>
-
                         <p className="text-[20px] md:text-[23px] leading-none font-light text-slate-200">Buenos días,</p>
                         <h1 className="text-[48px] md:text-[60px] lg:text-[64px] leading-[1.02] font-extrabold tracking-tight text-white mt-1">{userName}</h1>
 
@@ -1170,14 +1254,14 @@
 
                           <div className="relative w-[72px] h-[72px] rounded-full flex items-center justify-center shrink-0" style={{background:'conic-gradient(#1685ff 0deg 285deg, #0a2858 285deg 360deg)'}}>
                             <div className="w-[57px] h-[57px] rounded-full bg-[#04183b] flex items-center justify-center text-center">
-                              <div><span className="text-[18px] font-bold text-white block leading-none">12</span><span className="text-[8px] text-slate-400 leading-tight">proyectos<br/>activos</span></div>
+                              <div><span className="text-[18px] font-bold text-white block leading-none">12</span><span className="text-[8px] text-slate-400 leading-tight">proyectos<br/></span></div>
                             </div>
                           </div>
                         </div>
                       </div>
 
                       {/* CTA */}
-                      <button onClick={() => setActiveTab('proyectos')} className="w-full py-4 rounded-[18px] bg-gradient-to-r from-[#0756d9] to-[#176df3] border border-blue-400/70 text-white font-bold text-[16px] md:text-[17px] shadow-[0_8px_30px_rgba(0,91,255,.35)] flex items-center justify-center gap-3 hover:brightness-110 transition">
+                      <button onClick={() => setActiveTab('inicio')} className="w-full py-4 rounded-[18px] bg-gradient-to-r from-[#0756d9] to-[#176df3] border border-blue-400/70 text-white font-bold text-[16px] md:text-[17px] shadow-[0_8px_30px_rgba(0,91,255,.35)] flex items-center justify-center gap-3 hover:brightness-110 transition">
                         <span>Ver mis inversiones</span>
                         <span className="text-3xl leading-none font-light">›</span>
                       </button>
@@ -1469,6 +1553,7 @@
                           { id: 'seguridad', title: 'Seguridad', sub: 'Cambiar contraseña de acceso', icon: '🛡️' },
                           { id: 'notificaciones', title: 'Notificaciones', sub: 'Activar, desactivar y elegir tono', icon: '🔔' },
                           { id: 'documentos', title: 'Documentos', sub: 'Contratos, informes y comprobantes', icon: '📄' },
+                          ...(canAccessAdministration ? [{ id: 'administracion', title: 'Administración', sub: 'Usuarios, roles y estado de la cuenta', icon: '⚙️' }] : []),
                           { id: 'soporte', title: 'Ayuda y soporte', sub: 'Contactá al soporte por WhatsApp', icon: '❓' }
                         ].map(item => (
                           <button key={item.id} onClick={() => setProfileSection(item.id)} className="w-full bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between text-left hover:bg-slate-800/60 transition">
