@@ -145,11 +145,11 @@
     }
 
     .home-hero {
-      min-height: 360px;
+      min-height: 250px;
     }
 
     .home-patrimony {
-      margin-top: -1px;
+      margin-top: -22px;
     }
 
     .home-stats-grid {
@@ -188,7 +188,7 @@
       }
 
       .home-hero {
-        min-height: 330px;
+        min-height: 230px;
       }
 
       .home-stats-grid {
@@ -200,6 +200,189 @@
       .home-stat-card {
         min-height: auto;
       }
+    }
+
+
+
+    /* =========================================================
+       WEBLOCK - REDISEÑO UI/UX 2026
+       ========================================================= */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .project-card-unified {
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
+      min-height: 290px;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.10);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .project-card-unified:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.28);
+      border-color: rgba(59,130,246,.45);
+    }
+
+    .project-card-unified .project-state {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 4;
+      font-size: 12px;
+    }
+
+    .project-card-unified .project-arrow,
+    .module-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(2,8,22,.55);
+      color: white;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .project-card-unified .project-arrow {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 4;
+    }
+
+    .detail-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .detail-tab {
+      white-space: nowrap;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid #24314b;
+      background: #0b1323;
+      color: #94a3b8;
+    }
+    .detail-tab.active {
+      background: #1d4ed8;
+      color: #fff;
+      border-color: #3b82f6;
+    }
+    .gallery-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr);
+      gap: 12px;
+    }
+    .gallery-main {
+      position: relative;
+      min-height: 340px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #0a1222;
+    }
+    .gallery-main img {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-side {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+    }
+    .gallery-side button {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #0a1222;
+      padding: 0;
+    }
+    .gallery-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .detail-media {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #0a1222;
+    }
+    .detail-media img, .detail-media video {
+      width: 100%;
+      display: block;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .metric-card {
+      position: relative;
+      min-height: 138px;
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(15,23,42,.78);
+    }
+    .metric-card .module-arrow {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      font-size: 15px;
+    }
+    .info-module {
+      position: relative;
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(15,23,42,.78);
+    }
+    .info-module .module-arrow {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+    }
+    @media (max-width: 1100px) {
+      .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 767px) {
+      .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .project-card-unified { min-height: 220px; padding: 14px; border-radius: 20px; }
+      .project-card-unified .project-state { top: 12px; left: 12px; font-size: 10px; }
+      .project-card-unified .project-arrow { top: 12px; right: 12px; width: 34px; height: 34px; }
+      .gallery-wrap { grid-template-columns: 1fr; }
+      .gallery-main, .gallery-main img { min-height: 250px; }
+      .gallery-side { grid-template-columns: 1fr 1fr; grid-template-rows: 120px; }
+      .metric-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .metric-card { min-height: 130px; padding: 14px; }
     }
 
     ::-webkit-scrollbar { display: none; }
@@ -223,7 +406,7 @@
     const WeBlockLogo = ({ large = false }) => (
       <div className={`weblock-logo-crop ${large ? 'weblock-logo-large' : ''}`}>
         <img
-          src="./Logo.png"
+          src="./LogoWeBlock.png"
           alt="WeBlock"
           className="weblock-logo-image"
         />
@@ -357,7 +540,7 @@
             {!isLogin && (
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Nombre</label>
+                  <label className="text-xs text-slate-400 block mb-1">Nombre</label>
                   <input 
                     type="text" 
                     value={nombre} 
@@ -368,7 +551,7 @@
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Apellido</label>
+                  <label className="text-xs text-slate-400 block mb-1">Apellido</label>
                   <input 
                     type="text" 
                     value={apellido} 
@@ -382,7 +565,7 @@
             )}
 
             <div>
-              <label className="text-[11px] text-slate-400 block mb-1">Mail</label>
+              <label className="text-xs text-slate-400 block mb-1">Mail</label>
               <input 
                 type="email" 
                 value={email} 
@@ -394,7 +577,7 @@
             </div>
 
             <div>
-              <label className="text-[11px] text-slate-400 block mb-1">Contraseña</label>
+              <label className="text-xs text-slate-400 block mb-1">Contraseña</label>
               <input 
                 type="password" 
                 value={password} 
@@ -419,7 +602,7 @@
 
             {!isLogin && (
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">Repetir contraseña</label>
+                <label className="text-xs text-slate-400 block mb-1">Repetir contraseña</label>
                 <input 
                   type="password" 
                   value={repeatPassword} 
@@ -602,17 +785,20 @@
       };
 
       const playRingtone = () => {
-        try {
-          const ctx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const frequencies = { classic: 880, soft: 660, digital: 1200 };
-          osc.frequency.value = frequencies[ringtone] || 880;
-          osc.type = ringtone === 'digital' ? 'square' : 'sine';
-          gain.gain.setValueAtTime(0.08, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-          osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.35);
-        } catch (_) {}
+        const institutional = new Audio('./media/weblock-notificacion.mp3');
+        institutional.volume = 0.85;
+        institutional.play().catch(() => {
+          try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.frequency.value = 880;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+            osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.35);
+          } catch (_) {}
+        });
       };
 
       const toggleUser = (id) => {
@@ -763,20 +949,20 @@
                 ['Mail', user.email || '', () => {}, 'tu@email.com']
               ].map(([label, value, setter, placeholder]) => (
                 <div key={label}>
-                  <label className="text-[11px] text-slate-400 block mb-1">{label}</label>
+                  <label className="text-xs text-slate-400 block mb-1">{label}</label>
                   <input value={value} onChange={e => setter(e.target.value)} disabled={label === 'Mail'} placeholder={placeholder} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500 disabled:opacity-60" />
                 </div>
               ))}
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">Número de teléfono</label>
+                <label className="text-xs text-slate-400 block mb-1">Número de teléfono</label>
                 <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="Opcional" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" />
               </div>
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">Qué sos</label>
+                <label className="text-xs text-slate-400 block mb-1">Qué sos</label>
                 <select value={normalizedRole === 'dueño' || normalizedRole === 'owner' ? 'dueño' : normalizedRole === 'admin' ? 'admin' : 'cliente'} disabled className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none opacity-70">
                   <option value="cliente">Cliente</option><option value="admin">Administrador</option><option value="dueño">Dueño</option>
                 </select>
-                <p className="text-[9px] text-slate-500 mt-1">El rol lo administra WeBlock y no puede modificarse desde este perfil.</p>
+                <p className="text-[11px] text-slate-500 mt-1">El rol lo administra WeBlock y no puede modificarse desde este perfil.</p>
               </div>
               <button disabled={loading} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm disabled:opacity-50">{loading ? 'Guardando...' : 'Guardar cambios'}</button>
             </form>
@@ -784,9 +970,9 @@
 
           {section === 'seguridad' && (
             <form onSubmit={changePassword} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
-              <div><label className="text-[11px] text-slate-400 block mb-1">Contraseña actual</label><input type="password" required value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
-              <div><label className="text-[11px] text-slate-400 block mb-1">Nueva contraseña</label><input type="password" required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
-              <div><label className="text-[11px] text-slate-400 block mb-1">Repetir nueva contraseña</label><input type="password" required value={repeatNewPassword} onChange={e => setRepeatNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <div><label className="text-xs text-slate-400 block mb-1">Contraseña actual</label><input type="password" required value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <div><label className="text-xs text-slate-400 block mb-1">Nueva contraseña</label><input type="password" required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
+              <div><label className="text-xs text-slate-400 block mb-1">Repetir nueva contraseña</label><input type="password" required value={repeatNewPassword} onChange={e => setRepeatNewPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-sm outline-none focus:border-blue-500" /></div>
               <button disabled={loading} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm disabled:opacity-50">{loading ? 'Actualizando...' : 'Cambiar contraseña'}</button>
             </form>
           )}
@@ -794,7 +980,7 @@
           {section === 'notificaciones' && (
             <div className="space-y-3">
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 flex items-center justify-between">
-                <div><p className="text-sm font-bold text-white">Notificaciones</p><p className="text-[10px] text-slate-400 mt-1">Recibir avisos de movimientos y proyectos.</p></div>
+                <div><p className="text-sm font-bold text-white">Notificaciones</p><p className="text-xs text-slate-400 mt-1">Recibir avisos de movimientos y proyectos.</p></div>
                 <button onClick={() => toggleNotifications(!notifications)} className={`w-12 h-7 rounded-full p-1 transition ${notifications ? 'bg-blue-600' : 'bg-slate-700'}`}><span className={`block w-5 h-5 rounded-full bg-white transition ${notifications ? 'translate-x-5' : ''}`}></span></button>
               </div>
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5">
@@ -811,24 +997,24 @@
                   <div className="w-11 h-11 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">⚙️</div>
                   <div>
                     <p className="text-sm font-bold text-white">Información de la cuenta</p>
-                    <p className="text-[10px] text-slate-400">Datos generales de tu cuenta y permisos.</p>
+                    <p className="text-xs text-slate-400">Datos generales de tu cuenta y permisos.</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Nombre</p><p className="text-xs font-bold text-white mt-1">{userFullNameSafe(profile, user)}</p></div>
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Rol</p><p className="text-xs font-bold text-blue-400 mt-1">{roleLabel}</p></div>
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Correo</p><p className="text-xs font-bold text-white mt-1 truncate">{user.email}</p></div>
-                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[10px] text-slate-500">Usuarios registrados</p><p className="text-xs font-bold text-white mt-1">{adminLoading ? '...' : adminUsers.length}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[11px] text-slate-500">Nombre</p><p className="text-xs font-bold text-white mt-1">{userFullNameSafe(profile, user)}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[11px] text-slate-500">Rol</p><p className="text-xs font-bold text-blue-400 mt-1">{roleLabel}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[11px] text-slate-500">Correo</p><p className="text-xs font-bold text-white mt-1 truncate">{user.email}</p></div>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3"><p className="text-[11px] text-slate-500">Usuarios registrados</p><p className="text-xs font-bold text-white mt-1">{adminLoading ? '...' : adminUsers.length}</p></div>
                 </div>
                 <div className="mt-3 bg-blue-950/30 border border-blue-900/50 rounded-xl p-3">
-                  <p className="text-[10px] text-slate-500">Última actualización del panel</p>
+                  <p className="text-[11px] text-slate-500">Última actualización del panel</p>
                   <p className="text-xs font-semibold text-blue-300 mt-1">{adminLastUpdate ? adminLastUpdate.toLocaleString('es-AR') : 'Cargando...'}</p>
                 </div>
               </div>
 
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <div><p className="text-sm font-bold text-white">Usuarios registrados</p><p className="text-[10px] text-slate-400">Todos los perfiles registrados en WeBlock.</p></div>
+                  <div><p className="text-sm font-bold text-white">Usuarios registrados</p><p className="text-xs text-slate-400">Todos los perfiles registrados en WeBlock.</p></div>
                   <button onClick={loadAdministration} className="w-9 h-9 rounded-xl bg-blue-950/80 border border-blue-800/50 text-blue-400 flex items-center justify-center" title="Actualizar">↻</button>
                 </div>
                 {adminLoading ? <div className="text-center text-slate-500 text-xs py-8">Cargando usuarios...</div> :
@@ -843,7 +1029,7 @@
                        <div key={u.id} className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
                          <div className="flex items-center gap-3 min-w-0">
                            <div className="w-10 h-10 rounded-full bg-blue-950 border border-blue-800/60 flex items-center justify-center text-blue-400 shrink-0">👤</div>
-                           <div className="min-w-0"><p className="text-xs font-bold text-white truncate">{uName}</p><p className="text-[9px] text-slate-500 truncate">{u.email || 'Sin correo'}</p><p className="text-[9px] text-slate-600 mt-0.5">{uUpdated ? `Actualizado: ${new Date(uUpdated).toLocaleDateString('es-AR')}` : 'Sin fecha de actualización'}</p></div>
+                           <div className="min-w-0"><p className="text-xs font-bold text-white truncate">{uName}</p><p className="text-[11px] text-slate-500 truncate">{u.email || 'Sin correo'}</p><p className="text-[9px] text-slate-600 mt-0.5">{uUpdated ? `Actualizado: ${new Date(uUpdated).toLocaleDateString('es-AR')}` : 'Sin fecha de actualización'}</p></div>
                          </div>
                          <span className={`text-[9px] font-bold px-2 py-1 rounded-full shrink-0 ${uRoleLabel === 'Dueño' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : uRoleLabel === 'Administrador' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>{uRoleLabel}</span>
                        </div>
@@ -854,11 +1040,11 @@
 
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4">
                 <p className="text-sm font-bold text-white">Permisos de administración</p>
-                <p className="text-[10px] text-slate-400 mt-1 mb-3">El rol define qué funciones puede utilizar cada cuenta.</p>
+                <p className="text-xs text-slate-400 mt-1 mb-3">El rol define qué funciones puede utilizar cada cuenta.</p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Dueño</span><span className="text-[9px] text-emerald-400 font-bold">ACCESO TOTAL</span></div>
                   <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Administrador</span><span className="text-[9px] text-blue-400 font-bold">ADMINISTRACIÓN</span></div>
-                  <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Cliente</span><span className="text-[9px] text-slate-500 font-bold">SIN ACCESO</span></div>
+                  <div className="flex items-center justify-between bg-slate-950/60 rounded-xl px-3 py-2.5"><span className="text-xs text-slate-300">Cliente</span><span className="text-[11px] text-slate-500 font-bold">SIN ACCESO</span></div>
                 </div>
               </div>
             </div>
@@ -869,11 +1055,11 @@
               {canManageDocuments && (
                 <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-4">
                   <div className="flex items-center justify-between">
-                    <div><p className="text-sm font-bold text-white">Subir documento</p><p className="text-[10px] text-slate-400">PDF, Word y otros archivos.</p></div>
+                    <div><p className="text-sm font-bold text-white">Subir documento</p><p className="text-xs text-slate-400">PDF, Word y otros archivos.</p></div>
                     <span className="text-blue-400">↑</span>
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Quién puede verlo</label>
+                    <label className="text-xs text-slate-400 block mb-1">Quién puede verlo</label>
                     <select value={visibility} onChange={e => { setVisibility(e.target.value); setSelectedUserIds([]); }} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-xs">
                       <option value="all">Todos los usuarios</option>
                       <option value="admins">Solo dueño y administradores</option>
@@ -883,15 +1069,15 @@
                   {visibility === 'specific' && (
                     <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
                       <p className="text-[11px] font-bold text-white mb-2">Elegí quiénes pueden verlo</p>
-                      {loadingUsers ? <p className="text-[10px] text-slate-500">Cargando usuarios...</p> :
-                       users.length === 0 ? <p className="text-[10px] text-slate-500">No hay usuarios disponibles.</p> :
+                      {loadingUsers ? <p className="text-[11px] text-slate-500">Cargando usuarios...</p> :
+                       users.length === 0 ? <p className="text-[11px] text-slate-500">No hay usuarios disponibles.</p> :
                        <div className="space-y-2 max-h-48 overflow-y-auto">
                          {users.map(u => (
                            <label key={u.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-900 cursor-pointer">
                              <input type="checkbox" checked={selectedUserIds.includes(u.id)} onChange={() => toggleUser(u.id)} className="accent-blue-600" />
                              <div className="min-w-0">
                                <p className="text-xs text-white truncate">{u.nombre || u.apellido ? `${u.nombre || ''} ${u.apellido || ''}`.trim() : 'Sin nombre'}</p>
-                               <p className="text-[9px] text-slate-500 truncate">{u.email}</p>
+                               <p className="text-[11px] text-slate-500 truncate">{u.email}</p>
                              </div>
                            </label>
                          ))}
@@ -912,7 +1098,7 @@
                    <div className="flex items-center gap-3 min-w-0">
                      <div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 shrink-0">📄</div>
                      <div className="min-w-0"><p className="text-xs font-bold text-white truncate max-w-[210px]">{doc.name}</p>
-                       <p className="text-[9px] text-slate-500">{doc.visibility === 'all' ? 'Visible para todos' : doc.visibility === 'admins' ? 'Solo dueño/admin' : 'Usuarios seleccionados'} · {new Date(doc.created_at).toLocaleDateString('es-AR')}</p>
+                       <p className="text-[11px] text-slate-500">{doc.visibility === 'all' ? 'Visible para todos' : doc.visibility === 'admins' ? 'Solo dueño/admin' : 'Usuarios seleccionados'} · {new Date(doc.created_at).toLocaleDateString('es-AR')}</p>
                      </div>
                    </div>
                    <div className="flex items-center gap-2 shrink-0">
@@ -933,8 +1119,45 @@
       const [profile, setProfile] = useState(null);
       const [activeTab, setActiveTab] = useState('inicio');
       const [selectedProject, setSelectedProject] = useState(null);
+      const [detailTab, setDetailTab] = useState('resumen');
+      const [galleryIndex, setGalleryIndex] = useState(0);
       const [movFilter, setMovFilter] = useState('Todos');
       const [profileSection, setProfileSection] = useState(null);
+
+      const projectCatalog = {
+        'Torre Norte': {
+          name: 'Torre Norte', state: 'En construcción', developer: 'Desarrolladora Urbana', location: 'La Plata, Buenos Aires', investment: '$50.000.000', units: '50.000', participation: '2,35%', yield: '12,4%', progress: 64, description: 'Torre residencial de categoría con unidades destinadas a renta y valorización patrimonial.', color: 'blue',
+          images: [
+            {src:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1400&q=90', label:'Render principal'},
+            {src:'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=90', label:'Avance real'},
+            {src:'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=90', label:'Vista del proyecto'}
+          ]
+        },
+        'Distrito Verde': {
+          name: 'Distrito Verde', state: 'En preventa', developer: 'Desarrolladora Urbana', location: 'La Plata, Buenos Aires', investment: '$35.000.000', units: '35.000', participation: '1,85%', yield: '11,2%', progress: 38, description: 'Proyecto residencial sustentable enfocado en calidad de vida y crecimiento urbano.', color: 'emerald',
+          images: [
+            {src:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=90', label:'Render principal'},
+            {src:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=90', label:'Avance real'},
+            {src:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=90', label:'Detalle arquitectónico'}
+          ]
+        },
+        'Altos del Sur': {
+          name: 'Altos del Sur', state: 'En obra', developer: 'Desarrolladora Urbana', location: 'La Plata, Buenos Aires', investment: '$28.500.000', units: '24.800', participation: '1,42%', yield: '10,7%', progress: 52, description: 'Complejo residencial con foco en renta, conectividad y consolidación de valor.', color: 'amber',
+          images: [
+            {src:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1400&q=90', label:'Render principal'},
+            {src:'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=90', label:'Avance real'},
+            {src:'https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=900&q=90', label:'Espacios del proyecto'}
+          ]
+        },
+        'Costanera View': {
+          name: 'Costanera View', state: 'Finalizado', developer: 'Desarrolladora Urbana', location: 'La Plata, Buenos Aires', investment: '$22.000.000', units: '18.900', participation: '1,16%', yield: '9,8%', progress: 100, description: 'Desarrollo finalizado con unidades en explotación y documentación fiduciaria disponible.', color: 'purple',
+          images: [
+            {src:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=90', label:'Render principal'},
+            {src:'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=900&q=90', label:'Resultado final'},
+            {src:'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=90', label:'Vista interior'}
+          ]
+        }
+      };
 
       const loadProfile = async (currentUser) => {
         if (!currentUser) { setProfile(null); return; }
@@ -990,7 +1213,7 @@
                 return (
                   <button
                     key={item.id}
-                    onClick={() => { setActiveTab(item.id); setSelectedProject(null); }}
+                    onClick={() => { setActiveTab(item.id); setSelectedProject(null); setDetailTab('resumen'); setGalleryIndex(0); }}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition ${activeTab === item.id && !selectedProject ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-800/50'}`}
                   >
                     <Icon active={activeTab === item.id && !selectedProject} />
@@ -1002,269 +1225,183 @@
           </aside>
 
           {/* CONTENIDO PRINCIPAL */}
-          <main className={`flex-1 overflow-y-auto w-full max-w-none mx-auto p-4 md:p-8 lg:p-10 pb-28 ${selectedProject === 'Distrito Verde' ? 'bg-[#02120b]' : ''}`}>
+          <main className={`flex-1 overflow-y-auto w-full max-w-none mx-auto p-4 md:p-8 lg:p-10 pb-28 ${selectedProject ? 'bg-[#07111d]' : ''}`}>
             
             {/* ==================== VISTA DETALLE: DISTRITO VERDE ==================== */}
-            {selectedProject === 'Distrito Verde' ? (
-              <div className="space-y-5 animate-fadeIn">
-                {/* Header superior */}
-                <div className="flex justify-between items-center">
-                  <button onClick={() => setSelectedProject(null)} className="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/50 flex items-center justify-center text-emerald-400 text-xl font-bold">
-                    ‹
-                  </button>
-                  <button className="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/50 flex items-center justify-center text-emerald-400 text-sm">
-                    •••
-                  </button>
-                </div>
+            {selectedProject ? (
+              (() => {
+                const p = projectCatalog[selectedProject] || projectCatalog['Distrito Verde'];
+                const activeImage = p.images[galleryIndex] || p.images[0];
+                const tone = p.color === 'emerald' ? 'emerald' : p.color;
+                return (
+                  <div className="space-y-5 animate-fadeIn">
+                    <div className="flex items-center justify-between">
+                      <button onClick={() => { setSelectedProject(null); setDetailTab('resumen'); setGalleryIndex(0); }} className="module-arrow text-slate-200 hover:bg-slate-800 transition" aria-label="Volver">‹</button>
+                      <button className="module-arrow text-slate-300" aria-label="Más opciones">•••</button>
+                    </div>
 
-                {/* Título & Badge */}
-                <div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30 mb-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> En preventa
-                  </span>
-                  <h1 className="text-4xl font-serif-title font-bold text-white">Distrito Verde</h1>
-                  <p className="text-sm font-semibold text-slate-400 mt-1">Desarrolladora Urbana</p>
-                  <p className="text-xs text-slate-400 mt-2 max-w-md">Un proyecto residencial sustentable en el corazón de la ciudad.</p>
-                </div>
-
-                {/* Tarjeta Tu inversión total */}
-                <div className="bg-gradient-to-br from-emerald-950/90 via-emerald-950/40 to-slate-950 border border-emerald-800/60 rounded-2xl p-5 space-y-4 shadow-xl">
-                  <div>
-                    <p className="text-[11px] text-slate-300 font-medium mb-1">Tu inversión total</p>
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-white">$35.000.000</h2>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-xs pt-3 border-t border-emerald-800/40">
-                    <div>
-                      <p className="text-[10px] text-slate-400">Participación</p>
-                      <p className="font-bold text-white text-sm">1,85%</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400">Tokens adquiridos</p>
-                      <p className="font-bold text-white text-sm">35.000</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400">Rentabilidad anual estimada</p>
-                      <p className="font-bold text-white text-sm">11,2%</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400">Rendimiento acumulado</p>
-                      <p className="font-bold text-emerald-400 text-sm">+$2.450.000</p>
-                      <p className="text-[9px] text-emerald-500/80">+7,0% sobre tu inversión</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Próximo pago y Frecuencia */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-2xl p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-900/50 flex items-center justify-center text-emerald-400 shrink-0">
-                      📈
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400">Próximo pago estimado</p>
-                      <p className="text-xs font-bold text-white">15 de Agosto 2024</p>
-                      <p className="text-xs font-bold text-emerald-400">$1.250.000</p>
-                    </div>
-                  </div>
-
-                  <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-2xl p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-900/50 flex items-center justify-center text-emerald-400 shrink-0">
-                      📅
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-slate-400">Frecuencia de pagos</p>
-                      <p className="text-sm font-bold text-white">Trimestral</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Avance de obra */}
-                <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-2xl p-4 flex justify-between items-center">
-                  <div className="space-y-2 flex-1 pr-4">
-                    <p className="text-xs text-slate-400">Avance de obra</p>
-                    <p className="text-3xl font-extrabold text-white">38%</p>
-                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                      <div className="bg-emerald-500 h-full w-[38%] rounded-full"></div>
-                    </div>
-                    <p className="text-[10px] text-slate-500">Última actualización: 12 May 2024</p>
-                  </div>
-                  <div className="w-24 h-20 rounded-xl overflow-hidden bg-slate-800 shrink-0 border border-emerald-700/30">
-                    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80" alt="Edificio" className="w-full h-full object-cover" />
-                  </div>
-                </div>
-
-                {/* Documentos */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="text-xs font-bold text-white">Documentos</p>
-                    <a href="#" className="text-xs text-emerald-400 hover:underline">Ver todas ›</a>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { title: 'Fideicomiso', ext: 'PDF' },
-                      { title: 'Contrato', ext: 'PDF' },
-                      { title: 'Reporte mensual', ext: 'PDF' }
-                    ].map((doc, idx) => (
-                      <div key={idx} className="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-3 flex flex-col justify-between h-20">
-                        <span className="text-emerald-400 text-lg">📄</span>
-                        <div>
-                          <p className="text-[11px] font-bold text-white truncate">{doc.title}</p>
-                          <p className="text-[9px] text-slate-400">{doc.ext}</p>
-                        </div>
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-${tone}-500/15 text-${tone}-300 text-xs font-bold border border-${tone}-400/20`}>
+                          <span className={`w-1.5 h-1.5 rounded-full bg-${tone}-400`}></span>{p.state}
+                        </span>
+                        <h1 className="text-4xl md:text-5xl font-serif-title font-bold text-white mt-3">{p.name}</h1>
+                        <p className="text-sm font-semibold text-slate-300 mt-1">{p.developer}</p>
+                        <p className="text-sm text-slate-500 mt-1">{p.location}</p>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Noticias recientes */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="text-xs font-bold text-white">Noticias recientes</p>
-                    <a href="#" className="text-xs text-emerald-400 hover:underline">Ver todas ›</a>
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      { title: 'Avance de obra - Mayo 2024', date: '12 May 2024' },
-                      { title: 'Actualización de proyecto', date: '28 Abr 2024' }
-                    ].map((news, idx) => (
-                      <div key={idx} className="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-2.5 flex items-center justify-between cursor-pointer hover:bg-emerald-900/30 transition">
-                        <div className="flex items-center gap-3">
-                          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=150&q=80" className="w-12 h-10 rounded-lg object-cover" />
-                          <div>
-                            <p className="text-xs font-bold text-white">{news.title}</p>
-                            <p className="text-[10px] text-slate-400">{news.date}</p>
+                    <div className="detail-tabs">
+                      {[
+                        ['resumen','Resumen'],
+                        ['avance','Avance de obra'],
+                        ['multimedia','Multimedia'],
+                        ['documentos','Documentos']
+                      ].map(([id,label]) => (
+                        <button key={id} type="button" onClick={() => setDetailTab(id)} className={`detail-tab ${detailTab === id ? 'active' : ''}`}>{label}</button>
+                      ))}
+                    </div>
+
+                    <div className="gallery-wrap">
+                      <div className="gallery-main">
+                        <img src={activeImage.src} alt={activeImage.label} />
+                        <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/75 to-transparent">
+                          <div className="flex items-end justify-between gap-3">
+                            <div><p className="text-xs uppercase tracking-wide text-slate-300">Galería fotográfica</p><p className="text-sm font-bold text-white">{activeImage.label}</p></div>
+                            <div className="flex gap-2">
+                              <button type="button" onClick={() => setGalleryIndex((galleryIndex - 1 + p.images.length) % p.images.length)} className="module-arrow">‹</button>
+                              <button type="button" onClick={() => setGalleryIndex((galleryIndex + 1) % p.images.length)} className="module-arrow">›</button>
+                            </div>
                           </div>
                         </div>
-                        <span className="text-slate-400 text-sm">›</span>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div className="gallery-side">
+                        {p.images.slice(1,3).map((img,idx) => (
+                          <button key={img.src} type="button" onClick={() => setGalleryIndex(idx + 1)} className="hover:opacity-90 transition">
+                            <img src={img.src} alt={img.label} />
+                            <span className="absolute left-3 bottom-3 px-2 py-1 rounded-lg bg-black/60 text-[10px] font-bold text-white">{img.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-              </div>
+                    {detailTab === 'resumen' && (
+                      <>
+                        <div className="info-module">
+                          <button className="module-arrow" aria-label="Abrir módulo">→</button>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Detalle de inversión</p>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pr-12">
+                            <div><p className="text-xs text-slate-500">Monto invertido</p><p className="text-xl md:text-2xl font-extrabold text-white mt-1">{p.investment}</p></div>
+                            <div><p className="text-xs text-slate-500">Unidades adquiridas</p><p className="text-xl md:text-2xl font-extrabold text-white mt-1">{p.units}</p></div>
+                            <div><p className="text-xs text-slate-500">Porcentaje de Participación</p><p className="text-xl md:text-2xl font-extrabold text-white mt-1">{p.participation}</p></div>
+                            <div><p className="text-xs text-slate-500">Métrica clave</p><p className="text-xl md:text-2xl font-extrabold text-emerald-400 mt-1">{p.yield}</p><p className="text-xs text-slate-500 mt-1">Rendimiento anual estimado</p></div>
+                          </div>
+                        </div>
+                        <div className="info-module">
+                          <button className="module-arrow" aria-label="Abrir módulo">→</button>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Descripción del proyecto</p>
+                          <p className="text-sm text-slate-300 mt-3 max-w-3xl leading-6">{p.description}</p>
+                        </div>
+                      </>
+                    )}
+
+                    {detailTab === 'avance' && (
+                      <div className="info-module">
+                        <button className="module-arrow" aria-label="Abrir módulo">→</button>
+                        <div className="flex items-start justify-between gap-4 pr-12">
+                          <div>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Avance de obra</p>
+                            <p className="text-4xl font-extrabold text-white mt-2">{p.progress}%</p>
+                          </div>
+                          <div className="text-right"><p className="text-xs text-slate-500">Última actualización</p><p className="text-sm font-bold text-slate-200 mt-1">Agosto 2026</p></div>
+                        </div>
+                        <div className="w-full h-3 rounded-full bg-slate-800 mt-6 overflow-hidden"><div className={`h-full rounded-full bg-${tone}-500`} style={{width:`${p.progress}%`}}></div></div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+                          {['Estructura','Instalaciones','Terminaciones','Documentación'].map((label,idx) => <div key={label} className="rounded-xl bg-slate-950/60 border border-slate-800 p-3"><p className="text-xs text-slate-500">{label}</p><p className="text-sm font-bold text-white mt-1">{Math.min(100, Math.max(10, p.progress + [8,-4,-12,4][idx]))}%</p></div>)}
+                        </div>
+                      </div>
+                    )}
+
+                    {detailTab === 'multimedia' && (
+                      <div className="space-y-4">
+                        <div className="info-module">
+                          <button className="module-arrow" aria-label="Abrir módulo">→</button>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Recorrido 3D / informe audiovisual</p>
+                          <p className="text-sm text-slate-300 mt-2 mb-4">Reproductor integrado para informes mensuales de dirección de obra y arquitectura.</p>
+                          <div className="detail-media"><video controls poster={p.images[0].src}><source src="./media/distrito-verde-recorrido-3d.mp4" type="video/mp4" />Tu navegador no soporta reproducción de video.</video></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="info-module"><button className="module-arrow" aria-label="Abrir módulo">→</button><p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Render</p><img src={p.images[0].src} alt="Render" className="rounded-xl w-full mt-3 aspect-video object-cover" /></div>
+                          <div className="info-module"><button className="module-arrow" aria-label="Abrir módulo">→</button><p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Avance físico real</p><img src={p.images[1].src} alt="Avance físico real" className="rounded-xl w-full mt-3 aspect-video object-cover" /></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {detailTab === 'documentos' && (
+                      <div className="info-module">
+                        <button className="module-arrow" aria-label="Abrir módulo">→</button>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Documentación integrada</p>
+                        <p className="text-sm text-slate-400 mt-2">Descarga directa de informes técnicos y estados contables.</p>
+                        <div className="space-y-3 mt-4 pr-2">
+                          {[
+                            ['Informe técnico mensual','./media/documentos/informe-tecnico.pdf'],
+                            ['Estado contable','./media/documentos/estado-contable.pdf'],
+                            ['Documentación fiduciaria','./media/documentos/documentacion-fiduciaria.pdf']
+                          ].map(([label,href]) => (
+                            <a key={label} href={href} download className="flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:bg-slate-900 transition">
+                              <div><p className="text-sm font-bold text-white">{label}</p><p className="text-xs text-slate-500 mt-1">PDF · descarga directa</p></div><span className="module-arrow text-blue-400">↓</span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()
             ) : (
               <>
                 {/* ==================== VISTA: INICIO ==================== */}
                 {activeTab === 'inicio' && (
                   <div className="home-dashboard animate-fadeIn overflow-hidden">
-
-                    {/* HERO */}
                     <section className="home-hero relative overflow-hidden rounded-b-[34px] md:rounded-[0_0_36px_36px]">
                       <div className="absolute inset-0 bg-[#020b24]"></div>
-
-                      <div
-                        className="absolute inset-0 opacity-65"
-                        style={{
-                          backgroundImage: "linear-gradient(90deg, #020b24 0%, rgba(2,11,36,.90) 22%, rgba(2,11,36,.32) 68%, rgba(2,11,36,.08) 100%), linear-gradient(180deg, rgba(0,45,130,.22), rgba(0,10,30,.55)), url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1800&q=88')",
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center'
-                        }}
-                      ></div>
-
-                      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030816] to-transparent"></div>
-
-                      <div className="relative z-10 px-1 md:px-6 lg:px-8 pt-4 md:pt-7 pb-8">
-                        <p className="text-[20px] md:text-[23px] leading-none font-light text-slate-200">Buenos días,</p>
-                        <h1 className="text-[48px] md:text-[60px] lg:text-[64px] leading-[1.02] font-extrabold tracking-tight text-white mt-1">{userName}</h1>
-
-                        <p className="text-[11px] md:text-[13px] text-slate-400 mt-4 flex items-center gap-2">
-                          <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0z" />
-                          </svg>
+                      <div className="absolute inset-0 opacity-65" style={{backgroundImage:"linear-gradient(90deg,#020b24 0%,rgba(2,11,36,.90) 22%,rgba(2,11,36,.32) 68%,rgba(2,11,36,.08) 100%),linear-gradient(180deg,rgba(0,45,130,.22),rgba(0,10,30,.55)),url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1800&q=88')",backgroundSize:'cover',backgroundPosition:'center'}}></div>
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#030816] to-transparent"></div>
+                      <div className="relative z-10 px-1 md:px-6 lg:px-8 pt-3 md:pt-4 pb-4 md:pb-5">
+                        <p className="text-[18px] md:text-[21px] leading-none font-light text-slate-200">Buenos días,</p>
+                        <h1 className="text-[40px] md:text-[52px] lg:text-[58px] leading-[1.02] font-extrabold tracking-tight text-white mt-1">{userName}</h1>
+                        <p className="text-xs md:text-[13px] text-slate-400 mt-3 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0z" /></svg>
                           Patrimonio actualizado hoy 14:36
                         </p>
                       </div>
                     </section>
 
                     <div className="px-0 md:px-1 lg:px-0 space-y-3">
-
-                      {/* MI PATRIMONIO */}
-                      <div className="home-patrimony relative overflow-hidden rounded-[27px] border border-blue-500/70 bg-gradient-to-br from-[#07388e]/90 via-[#06275f]/90 to-[#031331] px-6 md:px-9 py-7 md:py-8 shadow-[0_0_30px_rgba(0,94,255,.12)]">
+                      <div className="home-patrimony relative overflow-hidden rounded-[27px] border border-blue-500/70 bg-gradient-to-br from-[#07388e]/90 via-[#06275f]/90 to-[#031331] px-6 md:px-9 py-5 md:py-6 shadow-[0_0_30px_rgba(0,94,255,.12)]">
                         <div className="absolute -right-12 -top-16 w-52 h-52 rounded-full bg-blue-500/10 blur-3xl"></div>
-                        <p className="relative text-[13px] md:text-[15px] font-semibold tracking-wide text-blue-300 uppercase mb-5">MI PATRIMONIO</p>
-                        <h2 className="relative text-[42px] md:text-[54px] lg:text-[58px] leading-none font-extrabold tracking-tight text-white">$245.300.000</h2>
-                        <div className="relative mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#062c62] border border-blue-500/20">
-                          <span className="text-[21px] text-emerald-400 leading-none">↑</span>
-                          <span className="text-[15px] md:text-[17px] font-bold text-emerald-400">+12,4%</span>
-                          <span className="text-[13px] md:text-[14px] text-slate-200">este año</span>
+                        <p className="relative text-[13px] md:text-[15px] font-semibold tracking-wide text-blue-300 uppercase mb-3">MI PATRIMONIO</p>
+                        <h2 className="relative text-[36px] md:text-[48px] lg:text-[54px] leading-none font-extrabold tracking-tight text-white">$245.300.000</h2>
+                        <div className="relative mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#062c62] border border-blue-500/20">
+                          <span className="text-[21px] text-emerald-400 leading-none">↑</span><span className="text-[15px] md:text-[17px] font-bold text-emerald-400">+12,4%</span><span className="text-[13px] md:text-[14px] text-slate-200">este año</span>
                         </div>
                       </div>
 
-                      {/* TRES RESUMENES - 3 COLUMNAS EN PC / VERTICAL EN CELULAR */}
                       <div className="home-stats-grid">
+                        <button type="button" onClick={() => setActiveTab('movimientos')} className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 py-5 flex items-center justify-between gap-3 text-left hover:bg-[#06204a] transition">
+                          <div><p className="text-xs text-blue-400 uppercase font-semibold">PRÓXIMO COBRO</p><p className="text-[18px] leading-tight font-bold text-white mt-1">15 de Agosto</p><p className="text-xs text-slate-400 mt-1">en 18 días</p></div><div className="text-right"><p className="text-xs text-blue-400 uppercase font-semibold">MONTO</p><p className="text-lg font-bold text-blue-400 mt-1">$2.350.000</p></div>
+                        </button>
 
-                        {/* PRÓXIMO COBRO */}
-                        <div className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
-                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <rect x="3" y="4" width="18" height="17" rx="3" strokeWidth="1.8"/><path strokeWidth="1.8" d="M7 2v4m10-4v4M3 9h18M8 13h3m-3 4h5"/>
-                              </svg>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-[11px] text-blue-400 uppercase font-semibold">PRÓXIMO COBRO</p>
-                              <p className="text-[18px] md:text-[19px] leading-tight font-bold text-white mt-1">15 de Agosto</p>
-                              <p className="text-[11px] text-slate-400 mt-1">en 18 días</p>
-                            </div>
-                          </div>
-                          <div className="text-right shrink-0">
-                            <p className="text-[10px] text-blue-400 uppercase font-semibold">MONTO</p>
-                            <p className="text-[17px] md:text-[19px] font-bold text-blue-400 mt-1">$2.350.000</p>
-                          </div>
-                        </div>
+                        <button type="button" onClick={() => setActiveTab('movimientos')} className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 py-5 flex items-center justify-between gap-3 text-left hover:bg-[#06204a] transition">
+                          <div><p className="text-xs text-blue-400 uppercase font-semibold">ÚLTIMO MOVIMIENTO</p><p className="text-[17px] leading-tight font-bold text-white mt-1">Cobro de rentabilidad</p><p className="text-xs text-slate-400 mt-1">Proyecto Torre Norte</p></div><div className="text-right"><p className="text-[17px] font-bold text-emerald-400">+$350.000</p><p className="text-xs text-slate-400 mt-1">15 Jul 2024</p></div>
+                        </button>
 
-                        {/* ÚLTIMO MOVIMIENTO */}
-                        <div onClick={() => setActiveTab('movimientos')} className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-[#06204a] transition">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
-                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="9" strokeWidth="1.8"/><path strokeWidth="1.8" d="M12 7v5l3 2"/>
-                              </svg>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-[11px] text-blue-400 uppercase font-semibold">ÚLTIMO MOVIMIENTO</p>
-                              <p className="text-[16px] md:text-[17px] font-bold text-white mt-1 truncate">Cobro de rentabilidad</p>
-                              <p className="text-[11px] text-slate-400 mt-1">Proyecto Torre Norte</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <div className="text-right">
-                              <p className="text-[15px] md:text-[17px] font-bold text-emerald-400">+$350.000</p>
-                              <p className="text-[10px] text-slate-400 mt-1">15 Jul 2024</p>
-                            </div>
-                            <span className="text-white text-2xl font-light">›</span>
-                          </div>
-                        </div>
-
-                        {/* ESTADO GENERAL */}
-                        <div className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 md:px-5 py-5 flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#063176] border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
-                              <svg className="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" d="M4 21h16M6 21V8l6-4 6 4v13M9 12h1m-1 4h1m4-4h1m-1 4h1"/>
-                              </svg>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-[11px] text-blue-400 uppercase font-semibold">ESTADO GENERAL</p>
-                              <p className="text-[16px] md:text-[17px] font-bold text-white mt-1">Activos y en desarrollo</p>
-                              <p className="text-[11px] text-slate-400 mt-1">Rendimiento anual: <span className="text-emerald-400 font-bold">+12,4%</span></p>
-                            </div>
-                          </div>
-
-                          <div className="relative w-[72px] h-[72px] rounded-full flex items-center justify-center shrink-0" style={{background:'conic-gradient(#1685ff 0deg 285deg, #0a2858 285deg 360deg)'}}>
-                            <div className="w-[57px] h-[57px] rounded-full bg-[#04183b] flex items-center justify-center text-center">
-                              <div><span className="text-[18px] font-bold text-white block leading-none">12</span><span className="text-[8px] text-slate-400 leading-tight">proyectos<br/></span></div>
-                            </div>
-                          </div>
-                        </div>
+                        <button type="button" onClick={() => setActiveTab('proyectos')} className="home-stat-card rounded-[22px] border border-blue-900/80 bg-[#04183b]/90 px-5 py-5 flex items-center justify-between gap-3 text-left hover:bg-[#06204a] transition">
+                          <div><p className="text-xs text-blue-400 uppercase font-semibold">ESTADO GENERAL</p><p className="text-[17px] leading-tight font-bold text-white mt-1">Activos y en desarrollo</p><p className="text-xs text-slate-400 mt-1">Rendimiento anual: <span className="text-emerald-400 font-bold">+12,4%</span></p></div><div className="w-16 h-16 rounded-full border border-blue-400/30 flex items-center justify-center text-center" style={{background:'conic-gradient(#1685ff 0deg 285deg,#0a2858 285deg 360deg)'}}><div className="w-12 h-12 rounded-full bg-[#04183b] flex items-center justify-center"><div><span className="text-lg font-bold text-white block leading-none">12</span><span className="text-[8px] text-slate-400">proyectos</span></div></div></div>
+                        </button>
                       </div>
 
-                      {/* CTA */}
-                      <button onClick={() => setActiveTab('inicio')} className="w-full py-4 rounded-[18px] bg-gradient-to-r from-[#0756d9] to-[#176df3] border border-blue-400/70 text-white font-bold text-[16px] md:text-[17px] shadow-[0_8px_30px_rgba(0,91,255,.35)] flex items-center justify-center gap-3 hover:brightness-110 transition">
-                        <span>Ver mis inversiones</span>
-                        <span className="text-3xl leading-none font-light">›</span>
-                      </button>
+                      <button type="button" onClick={() => setActiveTab('proyectos')} className="w-full py-4 rounded-[18px] bg-gradient-to-r from-[#0756d9] to-[#176df3] border border-blue-400/70 text-white font-bold text-[16px] md:text-[17px] shadow-[0_8px_30px_rgba(0,91,255,.35)] flex items-center justify-center gap-3 hover:brightness-110 transition"><span>Ver mis inversiones</span><span className="text-3xl leading-none font-light">›</span></button>
                     </div>
                   </div>
                 )}
@@ -1272,107 +1409,38 @@
                 {/* ==================== VISTA: PROYECTOS (ESTILO COMPLETO APILADO) ==================== */}
                 {activeTab === 'proyectos' && (
                   <div className="space-y-5 animate-fadeIn">
-                    <div className="flex justify-between items-center mb-1">
+                    <div className="flex justify-between items-end mb-1">
                       <div>
                         <h1 className="text-4xl font-extrabold text-white tracking-tight">Proyectos</h1>
-                        <p className="text-xs text-slate-400 mt-1">Tus inversiones en desarrollo</p>
+                        <p className="text-sm text-slate-400 mt-1">Tus inversiones en desarrollo</p>
                       </div>
-                      <button className="w-10 h-10 rounded-full bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-xl font-bold shadow-lg">
-                        +
-                      </button>
                     </div>
 
-                    {/* APILAMIENTO VERTICAL DE TARJETAS TAL CUAL LA FOTO */}
-                    <div className="stacked-container relative pt-2">
-                      
-                      {/* TARJETA 1: TORRE NORTE (AZUL CON IMAGEN DE FONDO) */}
-                      <div className="stacked-card card-blue rounded-[32px] p-6 z-40 relative overflow-hidden min-h-[300px] flex flex-col justify-between">
-                        <div>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[11px] font-semibold border border-blue-400/30 mb-3">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span> En construcción
+                    <div className="project-grid">
+                      {Object.values(projectCatalog).map(project => (
+                        <button
+                          key={project.name}
+                          type="button"
+                          onClick={() => { setSelectedProject(project.name); setDetailTab('resumen'); setGalleryIndex(0); }}
+                          className={`project-card-unified card-${project.color} text-left`}
+                        >
+                          <span className="project-state inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/70 text-white font-semibold border border-white/10">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{project.state}
                           </span>
-                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Torre Norte</h2>
-                          <p className="text-xs text-slate-300/80 font-medium mt-0.5">Desarrolladora Urbana</p>
-                        </div>
-
-                        <div className="space-y-3 my-2">
-                          <div>
-                            <p className="text-[10px] text-slate-300/70 font-medium">Rentabilidad anual estimada</p>
-                            <p className="text-3xl font-extrabold text-blue-400">12,4%</p>
-                          </div>
-
-                          <div>
-                            <p className="text-[10px] text-slate-300/70 font-medium">Tu inversión</p>
-                            <p className="text-2xl font-bold text-white">$50.000.000</p>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-end border-t border-blue-500/20 pt-3">
-                          <div className="flex gap-6">
-                            <div>
-                              <p className="text-[9px] text-slate-300/70">Participación</p>
-                              <p className="text-xs font-bold text-white">2,35%</p>
-                            </div>
-                            <div>
-                              <p className="text-[9px] text-slate-300/70">Tokens</p>
-                              <p className="text-xs font-bold text-white">50.000</p>
+                          <span className="project-arrow">→</span>
+                          <div className="absolute inset-0"><img src={project.images[0].src} alt="" className="w-full h-full object-cover opacity-28" /></div>
+                          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-slate-950/55 to-slate-950/95"></div>
+                          <div className="relative z-10 mt-auto">
+                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">{project.name}</h2>
+                            <p className="text-sm text-slate-300 mt-1">{project.developer} · {project.location}</p>
+                            <div className="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-white/10">
+                              <div><p className="text-xs text-slate-400">Unidades</p><p className="text-sm font-bold text-white mt-1">{project.units}</p></div>
+                              <div><p className="text-xs text-slate-400">Participación</p><p className="text-sm font-bold text-white mt-1">{project.participation}</p></div>
+                              <div><p className="text-xs text-slate-400">Rendimiento</p><p className="text-sm font-bold text-emerald-400 mt-1">{project.yield}</p></div>
                             </div>
                           </div>
-
-                          <div className="w-10 h-10 rounded-full bg-blue-900/60 border border-blue-400/50 flex items-center justify-center text-white text-lg">
-                            →
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* TARJETA 2: DISTRITO VERDE (VERDE CON IMAGEN DE FONDO) */}
-                      <div 
-                        onClick={() => setSelectedProject('Distrito Verde')} 
-                        className="stacked-card card-green rounded-[32px] p-6 z-30 relative overflow-hidden min-h-[220px] flex justify-between items-start"
-                      >
-                        <div className="space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-400/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> En preventa
-                          </span>
-                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Distrito Verde</h2>
-                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
-                        </div>
-
-                        <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
-                          →
-                        </div>
-                      </div>
-
-                      {/* TARJETA 3: ALTOS DEL SUR (ÁMBAR CON IMAGEN DE FONDO) */}
-                      <div className="stacked-card card-amber rounded-[32px] p-6 z-20 relative overflow-hidden min-h-[220px] flex justify-between items-start">
-                        <div className="space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-semibold border border-amber-400/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> En obra
-                          </span>
-                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Altos del Sur</h2>
-                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
-                        </div>
-
-                        <div className="w-10 h-10 rounded-full bg-amber-900/60 border border-amber-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
-                          →
-                        </div>
-                      </div>
-
-                      {/* TARJETA 4: COSTANERA VIEW (VIOLETA CON IMAGEN DE FONDO) */}
-                      <div className="stacked-card card-purple rounded-[32px] p-6 z-10 relative overflow-hidden min-h-[220px] flex justify-between items-start">
-                        <div className="space-y-2">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-[11px] font-semibold border border-purple-400/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Finalizado
-                          </span>
-                          <h2 className="text-3xl font-serif-title font-bold text-white tracking-wide">Costanera View</h2>
-                          <p className="text-xs text-slate-300/80 font-medium">Desarrolladora Urbana</p>
-                        </div>
-
-                        <div className="w-10 h-10 rounded-full bg-purple-900/60 border border-purple-400/50 flex items-center justify-center text-white text-lg shrink-0 mt-2">
-                          →
-                        </div>
-                      </div>
-
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -1393,12 +1461,12 @@
                     {/* Resumen Total Invertido y Cobrado */}
                     <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-[10px] text-slate-400 font-medium">Total invertido</p>
+                        <p className="text-xs text-slate-400 font-medium">Total invertido</p>
                         <p className="text-xl md:text-2xl font-extrabold text-white">$120.250.000</p>
                         <p className="text-[10px] text-blue-400 mt-1">↑ +8,4% vs. mes anterior</p>
                       </div>
                       <div>
-                        <p className="text-[10px] text-slate-400 font-medium">Total cobrado</p>
+                        <p className="text-xs text-slate-400 font-medium">Total cobrado</p>
                         <p className="text-xl md:text-2xl font-extrabold text-emerald-400">$28.450.000</p>
                         <p className="text-[10px] text-emerald-400 mt-1">↑ +12,7% vs. mes anterior</p>
                       </div>
@@ -1428,8 +1496,8 @@
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">Cobro de rentabilidad</p>
-                            <p className="text-[10px] text-slate-400">Torre Norte</p>
-                            <p className="text-[9px] text-slate-500">Hoy, 14:32</p>
+                            <p className="text-xs text-slate-400">Torre Norte</p>
+                            <p className="text-[11px] text-slate-500">Hoy, 14:32</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1448,8 +1516,8 @@
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">Inversión realizada</p>
-                            <p className="text-[10px] text-slate-400">Distrito Verde</p>
-                            <p className="text-[9px] text-slate-500">Hoy, 11:08</p>
+                            <p className="text-xs text-slate-400">Distrito Verde</p>
+                            <p className="text-[11px] text-slate-500">Hoy, 11:08</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1468,8 +1536,8 @@
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">Distribución de excedentes</p>
-                            <p className="text-[10px] text-slate-400">Altos del Sur</p>
-                            <p className="text-[9px] text-slate-500">Hoy, 09:15</p>
+                            <p className="text-xs text-slate-400">Altos del Sur</p>
+                            <p className="text-[11px] text-slate-500">Hoy, 09:15</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1493,8 +1561,8 @@
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">Cobro de alquiler</p>
-                            <p className="text-[10px] text-slate-400">Costanera View</p>
-                            <p className="text-[9px] text-slate-500">Ayer, 16:45</p>
+                            <p className="text-xs text-slate-400">Costanera View</p>
+                            <p className="text-[11px] text-slate-500">Ayer, 16:45</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1513,8 +1581,8 @@
                           </div>
                           <div>
                             <p className="text-xs font-bold text-white">Inversión realizada</p>
-                            <p className="text-[10px] text-slate-400">Torre Norte</p>
-                            <p className="text-[9px] text-slate-500">Ayer, 10:22</p>
+                            <p className="text-xs text-slate-400">Torre Norte</p>
+                            <p className="text-[11px] text-slate-500">Ayer, 10:22</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1544,7 +1612,7 @@
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4"><div className="w-16 h-16 rounded-full bg-blue-950 border-2 border-blue-500 flex items-center justify-center text-2xl">👤</div><div><h2 className="text-xl font-bold text-white">{userFullName}</h2><p className="text-xs text-slate-400">{user.email}</p><div className="flex items-center gap-1 mt-1 text-blue-400 text-xs font-semibold"><span>✓ Cuenta verificada</span><span className="text-slate-500">· {roleLabel}</span></div></div></div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800"><div><p className="text-[10px] text-slate-400">Patrimonio total</p><p className="text-base font-bold text-white">$245.300.000</p></div><div><p className="text-[10px] text-slate-400">Inversiones activas</p><p className="text-base font-bold text-white">8</p></div></div>
+                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800"><div><p className="text-xs text-slate-400">Patrimonio total</p><p className="text-base font-bold text-white">$245.300.000</p></div><div><p className="text-xs text-slate-400">Inversiones activas</p><p className="text-base font-bold text-white">8</p></div></div>
                       </div>
 
                       <div className="space-y-2">
@@ -1557,13 +1625,13 @@
                           { id: 'soporte', title: 'Ayuda y soporte', sub: 'Contactá al soporte por WhatsApp', icon: '❓' }
                         ].map(item => (
                           <button key={item.id} onClick={() => setProfileSection(item.id)} className="w-full bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between text-left hover:bg-slate-800/60 transition">
-                            <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-base">{item.icon}</div><div><p className="text-xs font-bold text-white">{item.title}</p><p className="text-[10px] text-slate-400">{item.sub}</p></div></div><span className="text-slate-400 text-base">›</span>
+                            <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-base">{item.icon}</div><div><p className="text-xs font-bold text-white">{item.title}</p><p className="text-xs text-slate-400">{item.sub}</p></div></div><span className="text-slate-400 text-base">›</span>
                           </button>
                         ))}
-                        <div onClick={() => supabase.auth.signOut()} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:bg-red-950/30 transition"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-red-950/80 border border-red-800/50 flex items-center justify-center text-red-400 text-base">🚪</div><div><p className="text-xs font-bold text-white">Cerrar sesión</p><p className="text-[10px] text-slate-400">Salir de tu cuenta de WeBlock</p></div></div><span className="text-slate-400 text-base">›</span></div>
+                        <div onClick={() => supabase.auth.signOut()} className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer hover:bg-red-950/30 transition"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-red-950/80 border border-red-800/50 flex items-center justify-center text-red-400 text-base">🚪</div><div><p className="text-xs font-bold text-white">Cerrar sesión</p><p className="text-xs text-slate-400">Salir de tu cuenta de WeBlock</p></div></div><span className="text-slate-400 text-base">›</span></div>
                       </div>
 
-                      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">🎧</div><div><p className="text-xs font-bold text-white">¿Necesitás ayuda?</p><p className="text-[10px] text-slate-400">Nuestro equipo está disponible<br/>de Lunes a Viernes de 9 a 18 hs.</p></div></div><button onClick={() => setProfileSection('soporte')} className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30">Contactar soporte</button></div>
+                      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-800/50 flex items-center justify-center text-blue-400 text-lg">🎧</div><div><p className="text-xs font-bold text-white">¿Necesitás ayuda?</p><p className="text-xs text-slate-400">Nuestro equipo está disponible<br/>de Lunes a Viernes de 9 a 18 hs.</p></div></div><button onClick={() => setProfileSection('soporte')} className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30">Contactar soporte</button></div>
                     </div>
                   )
                 )}
